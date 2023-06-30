@@ -1,5 +1,4 @@
-/node_modules/
-
-dist
-cache
-temp
+node_modules
+.vitepress/dist
+.vitepress/cache
+pnpm-lock.yaml

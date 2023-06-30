@@ -3,16 +3,16 @@
 layout: home
 
 hero:
-  name: "Dev Docs"
-  text: "A Development document that is biased towards the front end"
+  name: "My Awesome Project"
+  text: "A VitePress Site"
   tagline: My great project tagline
   actions:
     - theme: brand
       text: Markdown Examples
-      link: /guide/markdown-examples
+      link: /markdown-examples
     - theme: alt
       text: API Examples
-      link: /guide/api-examples
+      link: /api-examples
 
 features:
   - title: Feature A
