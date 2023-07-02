@@ -1,5 +1,6 @@
-# 在项目中使用 TypeScript
+# 在项目中使用
 
+如何在 JavaScript 项目中添加类型，以及 TSX & React 组件、事件类型声明
 
 ## 在 JavaScript 文件中声明类型
 

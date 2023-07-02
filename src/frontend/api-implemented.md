@@ -1,4 +1,6 @@
-# JavaScript 常用 API 实现
+# 常用方法实现
+
+实现常见的 JavaScript 方法
 
 ## 数组去重 unique
 
