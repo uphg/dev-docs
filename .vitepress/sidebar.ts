@@ -7,6 +7,7 @@ export default {
         { text: 'Iterable object（可迭代对象）', link: '/frontend/iterable-object' },
         { text: 'Generator', link: '/frontend/generators' },
         { text: '异步迭代和 generator', link: '/frontend/async-iterators-generators' },
+        { text: 'Proxy 和 Reflect', link: '/frontend/proxy' },
         { text: '常用方法实现', link: '/frontend/api-implemented' },
       ]
     },

@@ -375,3 +375,12 @@ g.next();        // { value: undefined, done: true }
 如果我们在已完成的 generator 上再次使用 `generator.return()`，它将再次返回该值（[MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator/return)）。
 
 通常我们不使用它，因为大多数时候我们想要获取所有的返回值，但是当我们想要在特定条件下停止 generator 时它会很有用。
+
+
+## 原文引用
+
+本文内容摘自 [现代 JavaScript 教程 - generators](https://zh.javascript.info/generators)
+
+## 署名和内容修改说明
+
+本文在作者原有文章上进行过内容的简化和修改。

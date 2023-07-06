@@ -173,3 +173,11 @@ let range = {
 但是实际上，这将是一件很奇怪的事情。
 
 :::
+
+## 原文引用
+
+本文内容摘自 [现代 JavaScript 教程 - 异步迭代和 generator](https://zh.javascript.info/async-iterators-generators)
+
+## 署名和内容修改说明
+
+本文在作者原有文章上进行过内容的简化和修改。
