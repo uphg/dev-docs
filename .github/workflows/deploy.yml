@@ -11,36 +11,23 @@ jobs:
       contents: read
       pages: write
       id-token: write
-
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
-    strategy:
-      matrix:
-        node_version: [16, 18, 20]
-
     steps:
-      - name: Checkout
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-
-      - name: Set node version to ${{ matrix.node_version }}
       - uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node_version }}
-          cache: npm
-
+          node-version: 16
       - run: npm ci
       - name: Build
         run: npm run docs:build
-
       - uses: actions/configure-pages@v2
       - uses: actions/upload-pages-artifact@v1
         with:
           path: docs/.vitepress/dist
-
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v1
