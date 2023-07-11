@@ -5,24 +5,16 @@ import sidebar from './sidebar'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   base: '/dev-docs/',
-  // head: [
-  //   [
-  //     'link',
-  //     {
-  //       href: 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap',
-  //       rel: 'stylesheet'
-  //     }
-  //   ]
-  // ],
-  title: "My Awesome Project",
-  description: "A VitePress Site",
+  title: "Dev Docs",
+  description: "A development document of my own",
   srcDir: './src',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
+    search: {
+      provider: 'local'
+    },
     nav: navbar,
-
     sidebar: sidebar,
-
     socialLinks: [
       { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
     ]

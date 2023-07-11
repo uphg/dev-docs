@@ -294,7 +294,7 @@ function callWithErrorHandling(fn) {
 使用
 
 ```jsx
-import utils from 'utils.js'
+import utils from './utils.js'
 // 注册错误处理程序
 utils.registerErrorHandler((e) => {
   console.log(e)
