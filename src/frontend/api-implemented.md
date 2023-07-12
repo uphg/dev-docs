@@ -106,7 +106,7 @@ function throttle(func, wait) {
 }
 ```
 
-## 发布订阅
+## 事件发布订阅 Emitter
 
 ```js
 class Emitter {
@@ -151,7 +151,7 @@ function bind(atThis, ...prevArgs) {
 export default bind
 ```
 
-## 深拷贝
+## 深拷贝 cloneDeep
 
 ```js
 function cloneDeep(value) {

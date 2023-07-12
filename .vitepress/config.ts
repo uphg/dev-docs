@@ -8,16 +8,20 @@ export default defineConfig({
   title: "Dev Docs",
   description: "A development document of my own",
   srcDir: './src',
+  lastUpdated: true,
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
-    search: {
-      provider: 'local'
-    },
     nav: navbar,
     sidebar: sidebar,
     socialLinks: [
       { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
-    ]
+    ],
+    search: {
+      provider: 'local'
+    },
+    editLink: {
+      pattern: 'https://github.com/uphg/dev-docs/edit/master/src/:path',
+    }
   }
 })
 
