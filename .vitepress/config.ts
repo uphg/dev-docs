@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitepress'
-import navbar from './navbar'
-import sidebar from './sidebar'
+import { nav, sidebar } from './navAndSidebar'
+
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -11,7 +11,7 @@ export default defineConfig({
   lastUpdated: true,
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
-    nav: navbar,
+    nav: nav,
     sidebar: sidebar,
     socialLinks: [
       { icon: 'github', link: 'https://github.com/vuejs/vitepress' }

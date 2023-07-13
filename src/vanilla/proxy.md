@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ProxyTransparentWrapper from './proxy/ProxyTransparentWrapper.vue'
+import IconProxyTransparentWrapper from '../_components/IconProxyTransparentWrapper.vue'
 </script>
 
 # Proxy 和 Reflect
@@ -43,7 +43,7 @@ for(let key in proxy) alert(key); // test，迭代也正常工作 (3)
 
 我们可以看到，没有任何捕捉器，`proxy` 是一个 `target` 的透明包装器（wrapper）。
 
-<ProxyTransparentWrapper />
+<IconProxyTransparentWrapper />
 
 `Proxy` 是一种特殊的“奇异对象（exotic object）”。它没有自己的属性。如果 `handler` 为空，则透明地将操作转发给 `target`。
 
