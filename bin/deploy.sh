@@ -4,8 +4,6 @@ set -e
 # 删除之前的文件
 rm -rf .vitepress/dist/
 
-echo '# build'
-
 # 生成静态文件
 pnpm docs:build
 
@@ -15,7 +13,7 @@ cd .vitepress/dist/
 # 如果是发布到自定义域名
 # echo 'uphgs.com' > CNAME &&
 
-echo '# git push'
+echo '# Git push'
 
 git init
 git add -A
