@@ -63,7 +63,8 @@ const Other = [
   {
     text: '环境配置',
     items: [
-      { text: 'Git 配置', link: '/other/git-config' }
+      { text: 'Git 配置', link: '/other/git-config' },
+      { text: 'ChatGPT 常用提示语', link: '/other/prompt' }
     ]
   }
 ]
