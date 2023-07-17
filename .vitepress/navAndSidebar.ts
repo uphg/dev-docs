@@ -41,10 +41,15 @@ const Vue = [
   }
 ]
 
-
-/**
- * 跨端
- * -------------------------------------------------------------------------- */
+const React = [
+  {
+    text: 'React',
+    items: [
+      { text: 'Lisp 入门', link: '/react/lisp' },
+      { text: '面向对象核心', link: '/react/object-oriented-core' }
+    ]
+  }
+]
 
 const ReactNative = [
   {
@@ -54,6 +59,52 @@ const ReactNative = [
     ]
   }
 ]
+
+
+/**
+ * 全栈
+ * -------------------------------------------------------------------------- */
+
+const Nodejs = [
+  {
+    text: 'Node.js 全解',
+    items: [
+      { text: 'Node.js 技术架构', link: '/nodejs/nodejs-technical-architecture'},
+      { text: '文件模块', link: '/nodejs/nodejs-fs-file'},
+      { text: '静态服务器', link: '/nodejs/static-server' },
+      { text: '命令行翻译工具', link: '/nodejs/nodejs-fanyi' },
+      { text: '操作数据库', link: '/nodejs/operational-database' },
+      { text: '数据库基础知识', link: '/nodejs/database-basics' },
+      { text: 'Stream 入门', link: '/nodejs/stream-getting-started' },
+      { text: '子进程', link: '/nodejs/child-process' },
+      { text: 'Express 全解', link: '/nodejs/express' },
+      { text: 'Koa 全解', link: '/nodejs/koa' },
+      { text: 'Next.js 全解', link: '/nodejs/nextjs' },
+      { text: 'TypeORM 数据库实践', link: '/nodejs/TypeORM-database-practice' },
+      { text: '数据库设计与搭建', link: '/nodejs/database-design-and-build' },
+      { text: '博客系统搭建', link: '/nodejs/blog-system-building' },
+    ]
+  },
+  {
+    text: 'Webpack 源码',
+    items: [
+      { text: 'AST、babel、依赖', link: '/nodejs/webpack-ast-babel-and-rely' },
+      { text: 'Webpack 核心原理', link: '/nodejs/webpack-core' },
+      { text: 'Loader 原理', link: '/nodejs/webpack-loader-principle' },
+      { text: 'Webpack 源码阅读', link: '/nodejs/webpack-source' }
+    ]
+  }
+]
+
+const FullStack = [
+  {
+    text: '记账',
+    items: [
+      { text: 'Docker 环境搭建', link: '/full-stack/docker-env' }
+    ]
+  }
+]
+
 
 /**
  * 杂项
@@ -80,14 +131,17 @@ export const nav = [
     items: [
       { text: 'JavaScript', link: JavaScript[0].items[0].link },
       { text: 'TypeScript', link: TypeScript[0].items[0].link },
-      { text: 'Vue', link: Vue[0].items[0].link }
+      { text: 'Vue', link: Vue[0].items[0].link },
+      { text: 'React', link: React[0].items[0].link },
+      { text: 'React Native', link: ReactNative[0].items[0].link }
     ]
   },
   {
-    text: '跨端',
-    activeMatch: '/react-native/',
+    text: '全栈',
+    activeMatch: '/nodejs/|/full-stack/',
     items: [
-      { text: 'React Native', link: ReactNative[0].items[0].link }
+      { text: 'Node.js', link: Nodejs[0].items[0].link },
+      { text: '全栈项目', link: FullStack[0].items[0].link },
     ]
   },
   {
@@ -101,6 +155,9 @@ export const sidebar = {
   '/vanilla/': JavaScript,
   '/typescript/': TypeScript,
   '/vue/': Vue,
+  '/react/': React,
   '/react-native/': ReactNative,
-  '/other/': Other
+  '/nodejs/': Nodejs,
+  '/other/': Other,
+  '/full-stack/': FullStack
 }
