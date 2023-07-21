@@ -37,6 +37,8 @@ const Vue = [
     text: 'Vue',
     items: [
       { text: '框架设计概览', link: '/vue/design-overview' },
+      { text: 'Vue.js 设计思路', link: '/vue/design-ideas' },
+      { text: '响应系统的作用与实现', link: '/vue/response-system' }
     ]
   }
 ]

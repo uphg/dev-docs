@@ -1,3 +1,7 @@
+<script lang="ts" setup>
+import VueVirtualDom from '../_components/VueVirtualDom.vue'
+</script>
+
 # 框架设计概览
 
 ## 命令式和声明式
@@ -31,20 +35,64 @@ Vue 声明式
 <div @click="() => alert('ok')">hello world</div>
 ```
 
-总结
+**总结**
 
-- 命令式更加关注实现过程，符合我们的逻辑直觉
-- 而声明式只关注结果，至于实现过程，我们并不关心
+- **命令式更加关注实现过程**，符合我们的逻辑直觉
+- **而声明式只关注结果**，至于实现过程，我们并不关心
 - Vue.js 的内部实现是命令式的，而暴露给用户的却更加声明式
 - 命令式代码性能总是优于声明式，但声明式的代码可维护性更高
 
+## 性能与可维护性的权衡
+
+声明式代码的性能不优于命令式代码的性能，以上面的例子来说，假如我们要修改 div 的内容为 hello vue3
+
+命令式
+
+```js
+div.textContent = 'hello vue3' // 直接修改
+```
+
+声明式
+
+```js
+<!-- 之前： -->
+<div @click="() => alert('ok')">hello world</div>
+<!-- 之后： -->
+<div @click="() => alert('ok')">hello vue3</div>
+```
+
+总结
+
+- 命令式代码的更新性能消耗：修改对应 div 的 textContent
+- 声明式代码的更新性能消耗：找出两个节点之间的差异；修改对应 div 的 textContent
+- 声明式代码会比命令式代码多出找出差异的性能消耗
+- 因此声明式代码性能无法超越命令式代码。但声明式代码可维护性更强，只展示结果，过程（获取对应 DOM 元素）我不关心。
+
+
 ## 虚拟 DOM
 
-虚拟 DOM 与其他方式渲染对比
+**innerHTML 和虚拟 DOM 在创建页面时的性能**
 
-- 原生 JavaScript：心智负担大，可维护性差，性能高
-- innerHTML：心智负担中等，可维护性中等（需要使用原生 JavaScript 绑定事件），代码过多时性能差
-- 虚拟 DOM：心智负担小，可维护性强，性能中等
+|                 | 虚拟 DOM             | innerHTML         |
+| --------------- | -------------------- | ----------------- |
+| JavaScript 运算 | 创建 JavaScript 对象 | 渲染 HTML 字符串  |
+| DOM 运算        | 新建所有 DOM 元素    | 新建所有 DOM 元素 |
+
+两者差距不大
+
+**虚拟 DOM 和 innerHTML 在更新页面时的性能**
+
+|                 | 虚拟 DOM                        | innerHTML                         |
+| --------------- | ------------------------------- | --------------------------------- |
+| JavaScript 运算 | 创建新的 JavaScript 对象 + Diff | 渲染 HTML 字符串                  |
+| DOM 运算        | 必要的 DOM 更新                 | 销毁所有旧 DOM，新建所有 DOM 元素 |
+
+虚拟 DOM 在 JavaScript 层面多出了 Diff 性能消耗，但在更新 DOM 层面只会更新必要元素，相比 innerHTML 的全量更新，大大减少了性能损耗。
+
+
+**总结虚拟 DOM 与其他方式渲染对比**
+
+<VueVirtualDom />
 
 ## 运行时和编译时
 
@@ -81,19 +129,19 @@ function Render(obj, root) {
 
 手写树型结构的数据对象太麻烦，不直观，能不能用类似 HTML 标签的结构描述树形对象呢？
 
-### **运行时 + 编译时**
+### 运行时 + 编译时
 
 创建一个 Compiler 用于将 HTML 字符串编译为树形结构
 
 ```jsx
 const html = `
-<div>
-  <span>hello world</span>
-</div>
+  <div>
+    <span>hello world</span>
+  </div>
 `
-// 调用 Compiler 编译得到树型结构的数据对象
+// 1. 调用 Compiler 编译得到树型结构的数据对象
 const obj = Compiler(html)
-// 再调用 Render 进行渲染
+// 2. 再调用 Render 进行渲染
 Render(obj, document.body)
 ```
 
@@ -107,15 +155,13 @@ Render(obj, document.body)
 
 将 HTML 直接转换为命令式代码，就称为纯编译时，如下：
 
-```html
+```js
+// HTML 结构
 <div>
   <span> hello world </span>
 </div>
-```
 
-编译为
-
-```js
+// 编译为 JS
 const div = document.createElement('div')
 const span = document.createElement('span')
 span.innerText = 'hello world'
@@ -133,6 +179,18 @@ document.body.appendChild(div)
 - 运行时：只提供树形结构对象（AST）转换为 DOM 元素的功能（性能较差）
 - 运行时+编译时：提供 HTML 字符串转 树形结构 再转为 DOM 元素的功能（可以在编译时标记需要优化的代码，在运行时优化性能）
 - 编译时：将 HTML 直接转换为 DOM 元素（命令式代码）灵活性较差，代码必须编译后再运行
+
+::: tip 注意
+
+使用 npm 打包生产环境的 Vue 默认情况下是不包含编译器的，只包含运行时。这是为了减小应用程序包体积。
+
+从 Vue2 开始，Vue 提供两个构建版本，即完整版和运行时：
+
+- 完整版：同时包含编译器和运行时的版本。
+- 编译器：用来将模板字符串编译成为 JavaScript 渲染函数的代码。
+- 运行时：用来创建 Vue 实例、渲染并处理虚拟 DOM 等的代码。基本上就是除去编译器的其它一切。
+
+:::
 
 ## 框架设计的核心要素
 
@@ -182,9 +240,8 @@ import {foo} from './utils'
 
 注释代码 `/#__PURE**__**/`，其作用就是告诉 rollup.js，对于 foo 函数的调用不会产生副作用，你可以放心地对其进行 Tree-Shaking，此时再次执行构建命令并查看 bundle.js 文件，就会发现它的内容是空的，这说明 Tree-Shaking 生效了。
 
-**副作用代码**
+> **副作用代码**就是，当调用函数的时候会对外部产生影响，例如修改了全局变量
 
-副作用就是，当调用函数的时候会对外部产生影响，例如修改了全局变量
 
 ### 错误提示
 
@@ -200,7 +257,7 @@ if (true && !res) {
   warn(`Failed to mount app: mount target selector "${container}" returned null.`)
 }
 
-// 生产环境（这段代码会被 Tree-Shaking 优化掉，俗称：dead code）
+// 生产环境（这段代码会被 Tree-Shaking 优化掉，不会在生产环境中出现，俗称：dead code）
 if (false && !res) {
   warn(`Failed to mount app: mount target selector "${container}" returned null.`)
 }
