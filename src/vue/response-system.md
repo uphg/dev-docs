@@ -169,4 +169,108 @@ obj.text = 'hello vue3'
 
 ![3.4](../_images/vue-response-system-3.jpg)
 
-嵌套的effect与effect栈
+## 非原始值响应方案
+
+解决继承原型时多次触发副作用函数的问题
+
+案例
+
+```js
+const obj = {}
+const proto = { bar: 1 }
+const child = reactive(obj)
+const parent = reactive(proto)
+// 使用 parent 作为 child 的原型
+Object.setPrototypeOf(child, parent)
+
+effect(() => {
+  console.log(child.bar) // 1
+})
+// 修改 child.bar 的值
+child.bar = 2 // 会导致副作用函数重新执行两次
+```
+
+解决方案：在代理的 get 函数中添加一个 raw 对象用于返回原始对象，在 set 时判断当前 target 是否为原始对象（不是的话就表明该对象是某对象的原型属性）
+
+```js{5-7,19-23}
+export function reactive(obj) {
+  return new Proxy(obj, {
+    get(target, key, receiver) {
+      // 代理对象可以通过 raw 属性访问原始数据
+      if (key === 'raw') {
+        return target
+      }
+
+      track(target, key)
+      return Reflect.get(target, key, receiver)
+    },
+
+    set(target, key, newVal, receiver) {
+      const oldVal = target[key]
+      const type = Object.prototype.hasOwnProperty.call(target, key) ? 'SET' : 'ADD'
+      const res = Reflect.set(target, key, newVal, receiver)
+
+      // target === receiver.raw 说明 receiver 就是 target 的代理对象
+      if (target === receiver.raw) {
+        if (oldVal !== newVal && (oldVal === oldVal || newVal === newVal)) {
+          trigger(target, key, type)
+        }
+      }
+
+      return res
+    },
+  })
+}
+```
+
+
+重写 Array 内置方法，使其支持代理对象，解决了原始对象引用无法判断的问题
+
+案例
+
+```js
+const obj = {}
+const arr = reactive([obj])
+
+console.log(arr.includes(obj))  // true
+```
+
+代码
+
+```js
+// 重写 Array 内置方法，使其支持代理对象
+const arrayInstrumentations = {}
+
+;['includes', 'indexOf', 'lastIndexOf'].forEach(method => {
+  const originMethod = Array.prototype[method]
+  arrayInstrumentations[method] = function(...args) {
+    // this 是代理对象，先在代理对象中查找，将结果存储到 res 中
+    let res = originMethod.apply(this, args)
+
+    if (res === false || res === -1) {
+      // res 为 false 说明没找到，通过 this.raw 拿到原始数组，再去其中查找，并更新 res 值
+      res = originMethod.apply(this.raw, args)
+    }
+    // 返回最终结果
+    return res
+  }
+})
+
+//  createReactive 部分实现
+function createReactive(obj, isShallow = false, isReadonly = false) {
+  return new Proxy(obj, {
+    get(target, key, receiver) {
+      if (key === 'raw') {
+        return target
+      }
+      // 如果操作的目标对象是数组，并且 key 存在于 arrayInstrumentations 上，
+      // 那么返回定义在 arrayInstrumentations 上的值
+      if (Array.isArray(target) && arrayInstrumentations.hasOwnProperty(key)) {
+        return Reflect.get(arrayInstrumentations, key, receiver)
+      }
+    }
+    // 此处省略其他代码...
+  })
+}
+```
+
