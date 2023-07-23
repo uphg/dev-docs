@@ -198,7 +198,7 @@ document.body.appendChild(div)
 - 警告信息，在开发环境中为用户提供友好的警告信息的同时，不会增加生产环境代码的体积。
 - 良好的 Tree-Shaking
 
-### **Tree-Shaking**
+## Tree-Shaking
 
 Tree-Shaking 指的就是消除那些永远不会被执行的代码，也就是排除 dead code
 
@@ -243,7 +243,7 @@ import {foo} from './utils'
 > **副作用代码**就是，当调用函数的时候会对外部产生影响，例如修改了全局变量
 
 
-### 错误提示
+## 错误提示
 
 Vue 利用 Tree-Shaking 机制，配合构建工具预定义常量，例如 `__DEV__` 常量，从而实现只在开发环境中打印警告信息，而生产环境则不包含该代码（优化代码体积）
 
@@ -263,7 +263,7 @@ if (false && !res) {
 }
 ```
 
-### esm-browser & esm-bundler 的区别
+## esm-browser & esm-bundler 的区别
 
 package.json 的配置示例
 
@@ -297,7 +297,7 @@ if ((process.env.NODE_ENV !== 'production')) {
 
 这样做的好处是，用户可以通过 webpack 配置自行决定构建资源的目标环境
 
-### 服务端渲染
+## 服务端渲染
 
 为了支持服务端渲染，还要输出这样的代码
 
@@ -307,7 +307,7 @@ const Vue = require('vue')
 
 服务端渲染在 Node.js 环境中运行，该环境资源的模块格式是 CommonJS，简称 cjs
 
-### 特性支持
+## 特性支持
 
 框架有时会提供多种特性开关，类似上文的 `__DEV__` ，如果你不需要该功能，可以选择是否关闭，比如 `__VUE_OPTIONS_API__` 表示是否支持 Options API（选项 API），由于 Vue 3 的 Options API 底层也是用 Composition API 实现，所以如果不支持  Options API 可以减少代码体积。示例：
 

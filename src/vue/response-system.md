@@ -169,108 +169,471 @@ obj.text = 'hello vue3'
 
 ![3.4](../_images/vue-response-system-3.jpg)
 
-## 非原始值响应方案
-
-解决继承原型时多次触发副作用函数的问题
-
-案例
+在 effect 添加一个依赖集合，并在每次副作用函数执行前清除之前的依赖
 
 ```js
-const obj = {}
-const proto = { bar: 1 }
-const child = reactive(obj)
-const parent = reactive(proto)
-// 使用 parent 作为 child 的原型
-Object.setPrototypeOf(child, parent)
+// 用一个全局变量存储被注册的副作用函数
+let activeEffect
+function effect(fn) {
+  const effectFn = () => {
+    // 调用 cleanup 函数完成清除工作
+    cleanup(effectFn)
+    activeEffect = effectFn
+    fn()
+  }
+  effectFn.deps = []
+  effectFn()
+}
 
-effect(() => {
-  console.log(child.bar) // 1
-})
-// 修改 child.bar 的值
-child.bar = 2 // 会导致副作用函数重新执行两次
+function cleanup(effectFn) {
+  // 遍历 effectFn.deps 数组
+  for (let i = 0; i < effectFn.deps.length; i++) {
+    // deps 是依赖集合
+    const deps = effectFn.deps[i]
+    // 将 effectFn 从依赖集合中移除
+    deps.delete(effectFn)
+  }
+  // 最后需要重置 effectFn.deps 数组
+  effectFn.deps.length = 0
+}
 ```
 
-解决方案：在代理的 get 函数中添加一个 raw 对象用于返回原始对象，在 set 时判断当前 target 是否为原始对象（不是的话就表明该对象是某对象的原型属性）
+在 track 中收集依赖
 
-```js{5-7,19-23}
-export function reactive(obj) {
-  return new Proxy(obj, {
-    get(target, key, receiver) {
-      // 代理对象可以通过 raw 属性访问原始数据
-      if (key === 'raw') {
-        return target
-      }
+```js
+function track(target, key) {
+  // 没有 activeEffect，直接 return
+  if (!activeEffect) return
+  let depsMap = bucket.get(target)
+  if (!depsMap) {
+    bucket.set(target, (depsMap = new Map()))
+  }
+  let deps = depsMap.get(key)
+  if (!deps) {
+    depsMap.set(key, (deps = new Set()))
+  }
+  // 把当前激活的副作用函数添加到依赖集合 deps 中
+  deps.add(activeEffect)
+  // deps 就是一个与当前副作用函数存在联系的依赖集合
+  activeEffect.deps.push(deps)
+}
+```
 
-      track(target, key)
-      return Reflect.get(target, key, receiver)
-    },
+但运行上面的代码会导致无限循环，这是在 trigger 函数中的 forEach 导致的
 
-    set(target, key, newVal, receiver) {
-      const oldVal = target[key]
-      const type = Object.prototype.hasOwnProperty.call(target, key) ? 'SET' : 'ADD'
-      const res = Reflect.set(target, key, newVal, receiver)
+```js{5}
+function trigger(target, key) {
+  const depsMap = bucket.get(target)
+  if (!depsMap) return
+  const effects = depsMap.get(key)
+  effects && effects.forEach(fn => fn())
+}
+```
 
-      // target === receiver.raw 说明 receiver 就是 target 的代理对象
-      if (target === receiver.raw) {
-        if (oldVal !== newVal && (oldVal === oldVal || newVal === newVal)) {
-          trigger(target, key, type)
-        }
-      }
+由于在 forEach 中的函数调用时清除同时又添加了 effects 的副作用函数，导致无限循环，该行为可以用以下代码描述
 
-      return res
-    },
+```js
+const set = new Set([1])
+
+set.forEach(item => {
+  set.delete(1)
+  set.add(1)
+  console.log('遍历中')
+})
+```
+
+解决方式很简单，创建一个新的 Set 集合用于遍历执行
+
+```js
+const set = new Set([1])
+
+const newSet = new Set(set)
+newSet.forEach(item => {
+  set.delete(1)
+  set.add(1)
+  console.log('遍历中')
+})
+```
+
+那么在 trigger 中也是同理
+
+```js{6,7}
+function trigger(target, key) {
+  const depsMap = bucket.get(target)
+  if (!depsMap) return
+  const effects = depsMap.get(key)
+
+  const effectsToRun = new Set(effects)
+  effectsToRun.forEach(effectFn => effectFn())
+}
+```
+
+## 嵌套 effect 与 effect 栈
+
+实际应用中，effect 是可以发生嵌套的，如下
+
+```js
+effect(function effectFn1() {
+  effect(function effectFn2() { /* ... */ })
+  /* ... */
+})
+```
+
+但我们的 effect 并不支持该功能，使用如下方式，避免嵌套时无法找到对应副作用函数
+
+```js{2,7-8,10-11}
+let activeEffect
+const effectStack = []
+
+function effect(fn) {
+  const effectFn = () => {
+    cleanup(effectFn)
+    activeEffect = effectFn
+    effectStack.push(effectFn)
+    fn()
+    effectStack.pop()
+    activeEffect = effectStack[effectStack.length - 1]
+  }
+  effectFn.deps = []
+  // 执行副作用函数
+  effectFn()
+}
+```
+
+这样就可以保证每次 activeEffect 执行的是最近的 effect 函数
+
+## 避免无限递归循环
+
+我们之前的实现方案，还有一个缺点，在运行以下代码时
+
+```js
+const data = { foo: 1 }
+const obj = new Proxy(data, { /*...*/ })
+
+effect(() => {
+  obj.foo = obj.foo + 1
+})
+```
+
+上面的代码会导致无限递归，主要原因是 effect 中首先读取 obj.foo 会触发 trank，将当前副作用添加到“桶”中，然后再赋值 obj.foo 会触发 trigger 操作，把副作用函数取出并执行，但当前副作用函数还正在执行，就要再次执行当前副作用函数，就会导致无限递归循环
+
+解决方式很简单，如果 trigger 触发执行的副作用函数与当前正在执行的副作用函数相同，则不触发执行：
+
+```js{8-10}
+function trigger(target, key) {
+  const depsMap = bucket.get(target)
+  if (!depsMap) return
+  const effects = depsMap.get(key)
+
+  const effectsToRun = new Set()
+  effects && effects.forEach(effectFn => {
+    if (effectFn !== activeEffect) {
+      effectsToRun.add(effectFn)
+    }
+  })
+  effectsToRun.forEach(effectFn => effectFn())
+}
+```
+
+## 调度执行
+
+所谓调度执行，指的是当 trigger 动作触发副作用函数重新执行时，有能力决定副作用函数执行的时机、次数以及方式：
+
+```js
+const data = { foo: 1 }
+const obj = new Proxy(data, { /* ... */ })
+
+effect(() => {
+  console.log(obj.foo)
+})
+
+obj.foo++
+
+console.log('结束了')
+```
+
+上面代码默认运行结果为
+
+```js
+1
+2
+'结束了'
+```
+
+现在假设需求有变，输出顺序需要调整为：
+
+```js
+1
+'结束了'
+2
+```
+
+此时就需要实现一个调度器 scheduler 选项，在 effect 中添加 options 选项
+
+```js{10}
+function effect(fn, options = {}) {
+  const effectFn = () => {
+    cleanup(effectFn)
+    activeEffect = effectFn
+    effectStack.push(effectFn)
+    fn()
+    effectStack.pop()
+    activeEffect = effectStack[effectStack.length - 1]
+  }
+  effectFn.options = options
+  effectFn.deps = []
+  effectFn()
+}
+```
+
+在 trigger 中调用
+
+```js{13-14}
+function trigger(target, key) {
+  const depsMap = bucket.get(target)
+  if (!depsMap) return
+  const effects = depsMap.get(key)
+
+  const effectsToRun = new Set()
+  effects && effects.forEach(effectFn => {
+    if (effectFn !== activeEffect) {
+      effectsToRun.add(effectFn)
+    }
+  })
+  effectsToRun.forEach(effectFn => {
+    if (effectFn.options.scheduler) {
+      effectFn.options.scheduler(effectFn)
+    } else {
+      effectFn()
+    }
   })
 }
 ```
 
-
-重写 Array 内置方法，使其支持代理对象，解决了原始对象引用无法判断的问题
-
-案例
+有了这个选项，就可以实现之前的需求了
 
 ```js
-const obj = {}
-const arr = reactive([obj])
+const data = { foo: 1 }
+const obj = new Proxy(data, { /* ... */ })
 
-console.log(arr.includes(obj))  // true
+effect(
+  () => {
+    console.log(obj.foo)
+  },
+  {
+    scheduler(fn) {
+      setTimeout(fn)
+    }
+  }
+)
+
+obj.foo++
+
+console.log('结束了')
 ```
 
-代码
+通过 setTimeout，就可以实现期望的打印顺序了
 
 ```js
-// 重写 Array 内置方法，使其支持代理对象
-const arrayInstrumentations = {}
+1
+'结束了'
+2
+```
 
-;['includes', 'indexOf', 'lastIndexOf'].forEach(method => {
-  const originMethod = Array.prototype[method]
-  arrayInstrumentations[method] = function(...args) {
-    // this 是代理对象，先在代理对象中查找，将结果存储到 res 中
-    let res = originMethod.apply(this, args)
+除了控制运行时机，我们还希望控制它的次数，像 Vue.js 中连续多次修改响应式数据但只会触发一次更新一样
 
-    if (res === false || res === -1) {
-      // res 为 false 说明没找到，通过 this.raw 拿到原始数组，再去其中查找，并更新 res 值
-      res = originMethod.apply(this.raw, args)
-    }
-    // 返回最终结果
-    return res
+```js
+// 定义一个任务队列
+const jobQueue = new Set()
+const p = Promise.resolve() // 创建一个稍后执行的微任务
+
+// 一个标志代表是否正在刷新队列
+let isFlushing = false
+function flushJob() {
+  if (isFlushing) return
+  isFlushing = true
+  p.then(() => {
+    jobQueue.forEach(job => job())
+  }).finally(() => {
+    isFlushing = false
+  })
+}
+
+
+effect(() => {
+  console.log(obj.foo)
+}, {
+  scheduler(fn) {
+    jobQueue.add(fn)
+    flushJob()
   }
 })
 
-//  createReactive 部分实现
-function createReactive(obj, isShallow = false, isReadonly = false) {
-  return new Proxy(obj, {
-    get(target, key, receiver) {
-      if (key === 'raw') {
-        return target
-      }
-      // 如果操作的目标对象是数组，并且 key 存在于 arrayInstrumentations 上，
-      // 那么返回定义在 arrayInstrumentations 上的值
-      if (Array.isArray(target) && arrayInstrumentations.hasOwnProperty(key)) {
-        return Reflect.get(arrayInstrumentations, key, receiver)
+obj.foo++
+obj.foo++
+```
+
+这样我们就实现了期望的输出：
+
+```js
+1
+3
+```
+
+## 计算属性 computed
+
+实现以下功能
+
+```js
+const data = { foo: 1, bar: 2 }
+const obj = new Proxy(data, { /* ... */ })
+
+const sumRes = computed(() => obj.foo + obj.bar)
+
+console.log(sumRes.value)  // 3
+console.log(sumRes.value)  // 3（返回上一次的值）
+
+obj.foo++
+
+console.log(sumRes.value) // 4
+```
+
+使用 dirty 实现只有当前值更新后才变更计算结果的功能，用 track 和 trigger 收集并触发当前计算属性对应的副作用函数
+
+```js
+function computed(getter) {
+  let value
+  let dirty = true
+
+  const effectFn = effect(getter, {
+    lazy: true,
+    scheduler() {
+      if (!dirty) {
+        dirty = true
+        // 当计算属性依赖的响应式数据变化时，手动调用 trigger 函数触发响应
+        trigger(obj, 'value')
       }
     }
-    // 此处省略其他代码...
   })
+
+  const obj = {
+    get value() {
+      if (dirty) {
+        value = effectFn()
+        dirty = false
+      }
+      // 读取 value 时，手动调用 track 函数进行追踪
+      track(obj, 'value')
+      return value
+    }
+  }
+
+  return obj
+}
+```
+
+## watch 的实现原理
+
+watch，其本质就是观测一个响应式数据，当数据发生变化时通知并执行相应的回调函数。
+
+```js
+watch(obj, () => {
+  console.log('数据变了')
+})
+
+obj.foo++
+```
+
+实现 watch，支持 getter 函数和响应式对象两种形式，并利用 effect 函数的 lazy 选项实现获取新值旧值，如下：
+
+```js
+function watch(source, cb) {
+  let getter
+  if (typeof source === 'function') {
+    getter = source
+  } else {
+    getter = () => traverse(source)
+  }
+  // 定义旧值与新值
+  let oldValue, newValue
+  const effectFn = effect(
+    () => getter(),
+    {
+      lazy: true,
+      scheduler() {
+        newValue = effectFn()
+        cb(newValue, oldValue)
+        oldValue = newValue
+      }
+    }
+  )
+  oldValue = effectFn()
+}
+```
+
+## 立即执行的 watch 与回调执行时机
+
+Vue 中的 watch 是支持 immediate 和 flush 选项的，如下
+
+```js
+// immediate
+watch(obj, () => {
+  console.log('变化了')
+}, {
+  // 回调函数会在 watch 创建时立即执行一次
+  immediate: true
+})
+
+// flush
+watch(obj, () => {
+  console.log('变化了')
+}, {
+  // 回调函数会在 watch 创建时立即执行一次
+  flush: 'pre' // 还可以指定为 'post' | 'sync'
+})
+```
+
+可以通过添加 options 选项实现
+
+```js
+function watch(source, cb, options = {}) {
+  let getter
+  if (typeof source === 'function') {
+    getter = source
+  } else {
+    getter = () => traverse(source)
+  }
+
+  let oldValue, newValue
+
+  const job = () => {
+    newValue = effectFn()
+    cb(newValue, oldValue)
+    oldValue = newValue
+  }
+
+  const effectFn = effect(
+    // 执行 getter
+    () => getter(),
+    {
+      lazy: true,
+      scheduler: () => {
+        // 在调度函数中判断 flush 是否为 'post'，如果是，将其放到微任务队列中执行
+        if (options.flush === 'post') {
+          const p = Promise.resolve()
+          p.then(job)
+        } else {
+          job()
+        }
+      }
+    }
+  )
+
+  if (options.immediate) {
+    job()
+  } else {
+    oldValue = effectFn()
+  }
 }
 ```
 
