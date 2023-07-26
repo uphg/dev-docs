@@ -5,16 +5,16 @@
 让代理对象支持 for...in 循环，首先添加 ITERATE_KEY 关联，表示当前对象 ITERATE_KEY 属性都是跟 for...in 关联的副作用
 
 ```js
-01 const obj = { foo: 1 }
-02 const ITERATE_KEY = Symbol()
-03
-04 const p = new Proxy(obj, {
-05   ownKeys(target) {
-06     // 将副作用函数与 ITERATE_KEY 关联
-07     track(target, ITERATE_KEY)
-08     return Reflect.ownKeys(target)
-09   }
-10 })
+const obj = { foo: 1 }
+const ITERATE_KEY = Symbol()
+
+const p = new Proxy(obj, {
+  ownKeys(target) {
+    // 将副作用函数与 ITERATE_KEY 关联
+    track(target, ITERATE_KEY)
+    return Reflect.ownKeys(target)
+  }
+})
 ```
 
 在设置时判断是添加还是修改、在删除时也添加触发
@@ -42,48 +42,45 @@ const p = new Proxy(obj, {
   // 省略其他拦截函数
 })
 
-01 const p = new Proxy(obj, {
-
-15 })
+const p = new Proxy(obj, {
+  //...
+})
 ```
 
 只有添加和删除时，才触发 ITERATE_KEY 相关副作用执行
 
 ```js
-01 function trigger(target, key, type) {
-02   const depsMap = bucket.get(target)
-03   if (!depsMap) return
-04   const effects = depsMap.get(key)
-05
-06   const effectsToRun = new Set()
-07   effects && effects.forEach(effectFn => {
-08     if (effectFn !== activeEffect) {
-09       effectsToRun.add(effectFn)
-10     }
-11   })
-12
-13   // 当操作类型为 ADD 或 DELETE 时，需要触发与 ITERATE_KEY 相关联的副作用函数重新执行
-14   if (type === 'ADD' || type === 'DELETE') {
-15     const iterateEffects = depsMap.get(ITERATE_KEY)
-16     iterateEffects && iterateEffects.forEach(effectFn => {
-17       if (effectFn !== activeEffect) {
-18         effectsToRun.add(effectFn)
-19       }
-20     })
-21   }
-22
-23   effectsToRun.forEach(effectFn => {
-24     if (effectFn.options.scheduler) {
-25       effectFn.options.scheduler(effectFn)
-26     } else {
-27       effectFn()
-28     }
-29   })
-30 }
+function trigger(target, key, type) {
+  const depsMap = bucket.get(target)
+  if (!depsMap) return
+  const effects = depsMap.get(key)
+
+  const effectsToRun = new Set()
+  effects && effects.forEach(effectFn => {
+    if (effectFn !== activeEffect) {
+      effectsToRun.add(effectFn)
+    }
+  })
+
+  // 当操作类型为 ADD 或 DELETE 时，需要触发与 ITERATE_KEY 相关联的副作用函数重新执行
+  if (type === 'ADD' || type === 'DELETE') {
+    const iterateEffects = depsMap.get(ITERATE_KEY)
+    iterateEffects && iterateEffects.forEach(effectFn => {
+      if (effectFn !== activeEffect) {
+        effectsToRun.add(effectFn)
+      }
+    })
+  }
+
+  effectsToRun.forEach(effectFn => {
+    if (effectFn.options.scheduler) {
+      effectFn.options.scheduler(effectFn)
+    } else {
+      effectFn()
+    }
+  })
+}
 ```
-
-
-
 
 ## 继承原型时多次触发副作用函数的问题
 
@@ -136,8 +133,6 @@ export function reactive(obj) {
   })
 }
 ```
-
-
 
 ## 数组的查找方法
 

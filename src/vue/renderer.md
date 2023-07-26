@@ -6,6 +6,8 @@
 
 ## 渲染器与响应系统的结合
 
+假如我们要实现一个如下代码的渲染器
+
 ```js
 import { effect, ref } from '@vue/reactivity'
 
@@ -22,9 +24,7 @@ effect(() => {
 count.value++
 ```
 
-
-
-渲染器内部的渲染函数实现
+可以这样实现，并且根据 vnode 是否存在，判断是渲染还是更新节点
 
 ```js
 function createRenderer() {
@@ -48,15 +48,15 @@ function createRenderer() {
 }
 ```
 
-p
+在更新 VNode 时，渲染器会使用 newVNode 与上一次渲染的 oldVNode 进行比较，试图找到并更新变更点。这个过程叫作“打补丁”（或更新），英文通常用 **patch** 来表达，如下：
 
 ```js
-function patch(n1, n2, container) {
-  // 如果 n1 不存在，意味着挂载，则调用 mountElement 函数完成挂载
-  if (!n1) {
-    mountElement(n2, container)
+function patch(oldNode, newNode, container) {
+  // 如果 oldNode 不存在，意味着挂载，则调用 mountElement 函数完成挂载
+  if (!oldNode) {
+    mountElement(newNode, container)
   } else {
-    // n1 存在，意味着打补丁，暂时省略
+    // oldNode 存在，意味着打补丁，暂时省略
   }
 }
 
@@ -68,6 +68,8 @@ function mountElement(vnode, container) {
   insert(el, container)
 }
 ```
+
+为了设计一个不依赖于浏览器平台的通用渲染器，我们需要将这些浏览器特有的 API 抽离。可以将这些操作 DOM 的 API 作为配置项，该配置项可以作为 createRenderer 函数的参数，如下：
 
 ```js
 // 在创建 renderer 时传入配置项
@@ -87,6 +89,37 @@ const renderer = createRenderer({
 })
 ```
 
+这样，在 createRenderer 函数内的 mountElement 等函数内就可以通过配置项来取得操作 DOM 的 API 了
+
+```js
+function createRenderer(options) {
+
+  // 通过 options 得到操作 DOM 的 API
+  const {
+    createElement,
+    insert,
+    setElementText
+  } = options
+
+  // 在这个作用域内定义的函数都可以访问那些 API
+  function mountElement(vnode, container) {
+    // ...
+  }
+
+  function patch(oldNode, newNode, container) {
+    // ...
+  }
+
+  function render(vnode, container) {
+    // ...
+  }
+
+  return {
+    render
+  }
+}
+```
+
 在卸载组件时，Vue 会调用 DOM API 卸载真实 DOM，如下
 
 ```js
@@ -98,11 +131,11 @@ function unmount(vnode) {
 }
 ```
 
-## 事件绑定
+## 事件绑定优化
 
-在 DOM 中，每次绑定事件需要调用 addEventListener，更新事件理论上需要先 removeEventListener 之前的事件绑定，再次 add
+在 DOM 中，每次绑定事件需要调用 addEventListener，更新事件理论上需要先 removeEventListener 之前的事件绑定，再次 addEventListener。
 
-但 Vue 使用了性能更优的方式绑定事件，即绑定一个伪造的事件处理函数 invoker，然后把真正的事件处理函数设置为 invoker.value 属性的值。这样当更新事件的时候，我们将不再需要调用 removeEventListener 函数来移除上一次绑定的事件，只需要更新 invoker.value 的值即可，如下面的代码所示。
+Vue 使用了性能更优的方式绑定事件，即绑定一个伪造的事件处理函数 invoker，然后把真正的事件处理函数设置为 invoker.value 属性的值。这样当更新事件的时候，我们将不再需要调用 removeEventListener 函数来移除上一次绑定的事件，只需要更新 invoker.value 的值即可，如下面的代码所示。
 
 ```js
 patchProps(el, key, prevValue, nextValue) {
@@ -143,30 +176,40 @@ patchProps(el, key, prevValue, nextValue) {
 
 ## 更新子节点
 
+子节点的类型分为以下三种：
+
+1. 没有子节点，此时 vnode.children 的值为 null。
+2. 具有文本子节点，此时 vnode.children 的值为字符串，代表文本的内容。
+3. 其他情况，无论是单个元素子节点，还是多个子节点（可能是文本和元素的混合），都可以用数组来表示。
+
+所以具体的更新子节点流程为：
+
 ```js
-function patchChildren(n1, n2, container) {
-  if (typeof n2.children === 'string') {
-    if (Array.isArray(n1.children)) {
-      n1.children.forEach((c) => unmount(c))
+function patchElement(oldNode, newNode) {
+  // ...
+
+  patchChildren(oldNode, newNode, el)
+}
+
+function patchChildren(oldNode, newNode, container) {
+  if (typeof newNode.children === 'string') {
+    if (Array.isArray(oldNode.children)) {
+      oldNode.children.forEach((c) => unmount(c))
     }
-    setElementText(container, n2.children)
-  } else if (Array.isArray(n2.children)) {
-    if (Array.isArray(n1.children)) {
+    setElementText(container, newNode.children)
+  } else if (Array.isArray(newNode.children)) {
+    if (Array.isArray(oldNode.children)) {
       //
     } else {
       setElementText(container, '')
-      n2.children.forEach(c => patch(null, c, container))
+      newNode.children.forEach(c => patch(null, c, container))
     }
   } else {
-    // 代码运行到这里，说明新子节点不存在
-    // 旧子节点是一组子节点，只需逐个卸载即可
-    if (Array.isArray(n1.children)) {
-      n1.children.forEach(c => unmount(c))
-    } else if (typeof n1.children === 'string') {
-      // 旧子节点是文本子节点，清空内容即可
+    if (Array.isArray(oldNode.children)) {
+      oldNode.children.forEach(c => unmount(c))
+    } else if (typeof oldNode.children === 'string') {
       setElementText(container, '')
     }
-    // 如果也没有旧子节点，那么什么都不需要做
   }
 }
 ```
@@ -196,41 +239,132 @@ const newVNode = {
 }
 ```
 
+patch 代码实现如下
+
+```js
+function createRenderer(options) {
+  const { createText, setText } = options
+  // ....
+
+  function patch(oldNode, newNode, container) {
+    if (oldNode && oldNode.type !== newNode.type) {
+      unmount(oldNode)
+      oldNode = null
+    }
+
+    const { type } = newNode
+
+    if (typeof type === 'string') {
+      if (!oldNode) {
+        mountElement(newNode, container)
+      } else {
+        patchElement(oldNode, newNode)
+      }
+    } else if (type === Text) {
+      if (!oldNode) {
+        const el = newNode.el = createText(newNode.children)
+        insert(el, container)
+      } else {
+        const el = newNode.el = oldNode.el
+        if (newNode.children !== oldNode.children) {
+          setText(el, newNode.children)
+        }
+      }
+    }
+  }
+
+  // ...
+}
+
+// 调用时
+const renderer = createRenderer({
+  // ...
+  // 封装文本节点操作代码
+  createText(text) {
+    return document.createTextNode(text)
+  },
+  setText(el, text) {
+    el.nodeValue = text
+  }
+  // ...
+})
+```
+
 ## Fragment
 
+如何用 vnode 描述 Fragment
+
+假如有如下组件
+
+```vue
+<List>
+  <Items />
+</List>
+```
+
+```vue
+<!-- List.vue -->
+<template>
+  <ul>
+    <slot />
+  </ul>
+</template>
+```
+
+```vue
+<!-- Items.vue -->
+<template>
+  <li>1</li>
+  <li>2</li>
+  <li>3</li>
+</template>
+```
+
+Vue3 使用如下对象描述 Items
 
 ```js
 const Fragment = Symbol()
+const vnode = {
+  type: Fragment,
+  children: [
+    { type: 'li', children: 'text 1' },
+    { type: 'li', children: 'text 2' },
+    { type: 'li', children: 'text 3' }
+  ]
+}
+```
 
-function patch(n1, n2, container) {
-  if (n1 && n1.type !== n2.type) {
-    unmount(n1)
-    n1 = null
+对于 Fragment 类型的 vnode 的来说，它的 children 存储的内容就是模板中所有根节点
+
+patch 实现如下
+
+```js
+function patch(oldNode, newNode, container) {
+  if (oldNode && oldNode.type !== newNode.type) {
+    unmount(oldNode)
+    oldNode = null
   }
 
-  const { type } = n2
+  const { type } = newNode
 
   if (typeof type === 'string') {
     // ...
   } else if (type === Text) {
     // ...
   } else if (type === Fragment) {
-    if (!n1) {
-      // 如果旧 vnode 不存在，则只需要将 Fragment 的 children 逐个挂载即可
-      n2.children.forEach(c => patch(null, c, container))
+    if (!oldNode) {
+      newNode.children.forEach(c => patch(null, c, container))
     } else {
-      // 如果旧 vnode 存在，则只需要更新 Fragment 的 children 即可
-      patchChildren(n1, n2, container)
+      patchChildren(oldNode, newNode, container)
     }
   }
 }
 ```
 
-unmount 支持 Fragmet 节点
+unmount 函数也需要支持 Fragment 类型的虚拟节点的卸载
 
 ```js
 function unmount(vnode) {
-  // 在卸载时，如果卸载的 vnode 类型为 Fragment，则需要卸载其 children
   if (vnode.type === Fragment) {
     vnode.children.forEach(c => unmount(c))
     return

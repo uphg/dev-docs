@@ -39,7 +39,10 @@ const Vue = [
       { text: '框架设计概览', link: '/vue/design-overview' },
       { text: 'Vue.js 设计思路', link: '/vue/design-ideas' },
       { text: '响应系统的作用与实现', link: '/vue/response-system' },
-      { text: '非原始值响应方案', link: '/vue/non-primitive-response' }
+      { text: '非原始值响应方案', link: '/vue/non-primitive-response' },
+      { text: '渲染器', link: '/vue/renderer' },
+      { text: 'Diff 算法', link: '/vue/diff' },
+
     ]
   }
 ]

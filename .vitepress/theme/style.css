@@ -182,3 +182,7 @@
 
 
 /* .VPDoc (页面样式) */
+:root {
+  --vp-font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco,
+  Consolas, 'Microsoft Yahei', 'SimHei', 'Liberation Mono', 'Courier New', monospace
+}

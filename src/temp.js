@@ -1,35 +1,46 @@
-patchProps(el, key, prevValue, nextValue) {
-  if (/^on/.test(key)) {
-    const invokers = el._vei || (el._vei = {})
-    let invoker = invokers[key]
-    const name = key.slice(2).toLowerCase()
-    if (nextValue) {
-      if (!invoker) {
-        invoker = el._vei[key] = (e) => {
-          // e.timeStamp 是事件发生的时间
-          // 如果事件发生的时间早于事件处理函数绑定的时间，则不执行事件处理函数
-          if (e.timeStamp < invoker.attached) return
-          if (Array.isArray(invoker.value)) {
-            invoker.value.forEach(fn => fn(e))
-          } else {
-            invoker.value(e)
-          }
+if (j > oldEnd && j <= newEnd) {
+  // 省略部分代码
+} else if (j > newEnd && j <= oldEnd) {
+  // 省略部分代码
+} else {
+  // 构造 source 数组
+  const count = newEnd - j + 1
+  const source = new Array(count)
+  source.fill(-1)
+
+  const oldStart = j
+  const newStart = j
+  let moved = false
+  let pos = 0
+  const keyIndex = {}
+  for(let i = newStart; i <= newEnd; i++) {
+    keyIndex[newChildren[i].key] = i
+  }
+  // 新增 patched 变量，代表更新过的节点数量
+  let patched = 0
+  for(let i = oldStart; i <= oldEnd; i++) {
+    oldVNode = oldChildren[i]
+    // 如果更新过的节点数量小于等于需要更新的节点数量，则执行更新
+    if (patched <= count) {
+      const k = keyIndex[oldVNode.key]
+      if (typeof k !== 'undefined') {
+        newVNode = newChildren[k]
+        patch(oldVNode, newVNode, container)
+        // 每更新一个节点，都将 patched 变量 +1
+        patched++
+        source[k - newStart] = i
+        if (k < pos) {
+          moved = true
+        } else {
+          pos = k
         }
-        invoker.value = nextValue
-        // 添加 invoker.attached 属性，存储事件处理函数被绑定的时间
-        invoker.attached = performance.now()
-        el.addEventListener(name, invoker)
       } else {
-        invoker.value = nextValue
+        // 没找到
+        unmount(oldVNode)
       }
-    } else if (invoker) {
-      el.removeEventListener(name, invoker)
+    } else {
+      // 如果更新过的节点数量大于需要更新的节点数量，则卸载多余的节点
+      unmount(oldVNode)
     }
-  } else if (key === 'class') {
-    // 省略部分代码
-  } else if (shouldSetAsProps(el, key, nextValue)) {
-    // 省略部分代码
-  } else {
-    // 省略部分代码
   }
 }
