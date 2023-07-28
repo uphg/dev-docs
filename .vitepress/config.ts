@@ -1,9 +1,11 @@
 import { defineConfig } from 'vitepress'
+import { fileURLToPath } from 'url'
 import { nav, sidebar } from './navAndSidebar'
+import { withMermaid } from "vitepress-plugin-mermaid";
 
 
 // https://vitepress.dev/reference/site-config
-export default defineConfig({
+export default defineConfig(withMermaid({
   base: '/dev-docs/',
   title: "Dev Docs",
   description: "A development document of my own",
@@ -22,7 +24,15 @@ export default defineConfig({
     editLink: {
       pattern: 'https://github.com/uphg/dev-docs/edit/master/src/:path',
     }
-  }
-})
+  },
+  vite: {
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('../src', import.meta.url))
+      }
+    }
+  },
+  mermaid: {}
+}))
 
 

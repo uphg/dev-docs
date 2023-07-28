@@ -2,24 +2,26 @@
  * 前端
  * -------------------------------------------------------------------------- */
 
-const JavaScript = [
+import { DefaultTheme } from "vitepress"
+
+// 全栈
+
+const frontend = [
   {
     text: 'JavaScript',
-    items: [
+    collapsed: false,
+    items: createItems('/frontend/', [
       { text: 'Iterable object（可迭代对象）', link: '/vanilla/iterable-object' },
       { text: 'Generator', link: '/vanilla/generators' },
       { text: '异步迭代和 generator', link: '/vanilla/async-iterators-generators' },
       { text: 'Proxy 和 Reflect', link: '/vanilla/proxy' },
       { text: '常用方法实现', link: '/vanilla/api-implemented' },
-    ]
-  }
-]
-
-const TypeScript = [
+    ]) 
+  },
   {
     text: 'TypeScript',
     collapsed: false,
-    items: [
+    items: createItems('/frontend/', [
       { text: '类型基础', link: '/typescript/basics' },
       { text: '类型兼容', link: '/typescript/compatible' },
       { text: '函数', link: '/typescript/function' },
@@ -28,93 +30,83 @@ const TypeScript = [
       { text: '类型体操', link: '/typescript/gymnastics' },
       { text: '在项目中使用', link: '/typescript/used-in-the-project' },
       { text: 'TypeScript Config', link: '/typescript/config' }
-    ]
-  }
-]
-
-const Vue = [
+    ])
+  },
   {
-    text: 'Vue',
-    items: [
+    text: 'Vue 设计与实现',
+    collapsed: false,
+    items: createItems('/frontend/', [
       { text: '框架设计概览', link: '/vue/design-overview' },
       { text: 'Vue.js 设计思路', link: '/vue/design-ideas' },
       { text: '响应系统的作用与实现', link: '/vue/response-system' },
-      { text: '非原始值响应方案', link: '/vue/non-primitive-response' },
+      { text: '非原始值 & 原始值响应方案', link: '/vue/non-primitive-response' },
       { text: '渲染器', link: '/vue/renderer' },
       { text: 'Diff 算法', link: '/vue/diff' },
-
-    ]
-  }
-]
-
-const React = [
+    ])
+  },
   {
     text: 'React',
-    items: [
-      { text: 'Lisp 入门', link: '/react/lisp' },
-      { text: '面向对象核心', link: '/react/object-oriented-core' }
-    ]
-  }
-]
-
-const ReactNative = [
+    collapsed: false,
+    items: createItems('/frontend/react/', [
+      { text: 'Lisp 入门', link: '/lisp' },
+      { text: '面向对象核心', link: '/object-oriented-core' }
+    ])
+  },
   {
     text: 'React Native',
-    items: [
-      { text: '环境搭建', link: '/react-native/environment-setup'},
-    ]
+    collapsed: false,
+    items: createItems('/frontend/react-native/', [
+      { text: '环境搭建', link: '/environment-setup'},
+    ])
   }
 ]
 
-
-/**
- * 全栈
- * -------------------------------------------------------------------------- */
-
-const Nodejs = [
+const fullStack = [
   {
     text: 'Node.js 全解',
-    items: [
-      { text: 'Node.js 技术架构', link: '/nodejs/nodejs-technical-architecture'},
-      { text: '文件模块', link: '/nodejs/nodejs-fs-file'},
-      { text: '静态服务器', link: '/nodejs/static-server' },
-      { text: '命令行翻译工具', link: '/nodejs/nodejs-fanyi' },
-      { text: '操作数据库', link: '/nodejs/operational-database' },
-      { text: '数据库基础知识', link: '/nodejs/database-basics' },
-      { text: 'Stream 入门', link: '/nodejs/stream-getting-started' },
-      { text: '子进程', link: '/nodejs/child-process' },
-      { text: 'Express 全解', link: '/nodejs/express' },
-      { text: 'Koa 全解', link: '/nodejs/koa' },
-      { text: 'Next.js 全解', link: '/nodejs/nextjs' },
-      { text: 'TypeORM 数据库实践', link: '/nodejs/TypeORM-database-practice' },
-      { text: '数据库设计与搭建', link: '/nodejs/database-design-and-build' },
-      { text: '博客系统搭建', link: '/nodejs/blog-system-building' },
-    ]
+    collapsed: false,
+    items: createItems('/full-stack/nodejs/', [
+      { text: 'Node.js 技术架构', link: '/nodejs-technical-architecture'},
+      { text: '文件模块', link: '/nodejs-fs-file'},
+      { text: '静态服务器', link: '/static-server' },
+      { text: '命令行翻译工具', link: '/nodejs-fanyi' },
+      { text: '操作数据库', link: '/operational-database' },
+      { text: '数据库基础知识', link: '/database-basics' },
+      { text: 'Stream 入门', link: '/stream-getting-started' },
+      { text: '子进程', link: '/child-process' },
+      { text: 'Express 全解', link: '/express' },
+      { text: 'Koa 全解', link: '/koa' },
+      { text: 'Next.js 全解', link: '/nextjs' },
+      { text: 'TypeORM 数据库实践', link: '/TypeORM-database-practice' },
+      { text: '数据库设计与搭建', link: '/database-design-and-build' },
+      { text: '博客系统搭建', link: '/blog-system-building' },
+    ])
   },
   {
     text: 'Webpack 源码',
-    items: [
-      { text: 'AST、babel、依赖', link: '/nodejs/webpack-ast-babel-and-rely' },
-      { text: 'Webpack 核心原理', link: '/nodejs/webpack-core' },
-      { text: 'Loader 原理', link: '/nodejs/webpack-loader-principle' },
-      { text: 'Webpack 源码阅读', link: '/nodejs/webpack-source' }
-    ]
-  }
-]
-
-const FullStack = [
+    collapsed: false,
+    items: createItems('/full-stack/nodejs/', [
+      { text: 'AST、babel、依赖', link: '/webpack-ast-babel-and-rely' },
+      { text: 'Webpack 核心原理', link: '/webpack-core' },
+      { text: 'Loader 原理', link: '/webpack-loader-principle' },
+      { text: 'Webpack 源码阅读', link: '/webpack-source' }
+    ])
+  },
+  {
+    text: 'Web 性能优化',
+    items: createItems('/full-stack/', [
+      { text: 'HTTP', link: '/http' },
+      { text: '浏览器渲染原理', link: '/browser-rendering-principle' }
+    ])
+  },
   {
     text: '记账',
-    items: [
-      { text: 'Docker 环境搭建', link: '/full-stack/docker-env' }
-    ]
-  }
+    collapsed: false,
+    items: createItems('/full-stack/', [
+      { text: 'Docker 环境搭建', link: '/docker-env' }
+    ])
+  },
 ]
-
-
-/**
- * 杂项
- * -------------------------------------------------------------------------- */
 
 const Other = [
   {
@@ -133,37 +125,27 @@ export const nav = [
   },
   {
     text: '前端',
-    activeMatch: '/vanilla/|/typescript/|/vue/',
-    items: [
-      { text: 'JavaScript', link: JavaScript[0].items[0].link },
-      { text: 'TypeScript', link: TypeScript[0].items[0].link },
-      { text: 'Vue', link: Vue[0].items[0].link },
-      { text: 'React', link: React[0].items[0].link },
-      { text: 'React Native', link: ReactNative[0].items[0].link }
-    ]
+    activeMatch: '/frontend/',
+    link: frontend[0].items[0].link!
   },
   {
     text: '全栈',
-    activeMatch: '/nodejs/|/full-stack/',
-    items: [
-      { text: 'Node.js', link: Nodejs[0].items[0].link },
-      { text: '全栈项目', link: FullStack[0].items[0].link },
-    ]
+    activeMatch: '/full-stack/',
+    link: fullStack[0].items[0].link!
   },
   {
     text: '杂项',
     activeMatch: '/other/',
-    link: Other[0].items[0].link
+    link: Other[0].items[0].link!
   }
 ]
 
 export const sidebar = {
-  '/vanilla/': JavaScript,
-  '/typescript/': TypeScript,
-  '/vue/': Vue,
-  '/react/': React,
-  '/react-native/': ReactNative,
-  '/nodejs/': Nodejs,
+  '/frontend/': frontend,
+  '/full-stack/': fullStack,
   '/other/': Other,
-  '/full-stack/': FullStack
+}
+
+function createItems(pathPrefix: string, list: DefaultTheme.SidebarItem[]): DefaultTheme.SidebarItem[] {
+  return list.map(item => ({ ...item, link: `${pathPrefix}${item.link}`.replace(/\/\//g, '/') }))
 }

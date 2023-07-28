@@ -126,5 +126,5 @@ setImmediate(f2)
 end 。。。
 
 <script lang="ts" setup>
-import NodejsTechnologyArchitecture from '../_components/NodejsTechnologyArchitecture.vue'
+import NodejsTechnologyArchitecture from '@/_components/NodejsTechnologyArchitecture.vue'
 </script>

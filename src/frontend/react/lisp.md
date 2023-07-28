@@ -9,7 +9,7 @@ Scheme 是 Lisp 的方言版本。
   <details class="details-image">
     <summary>图片</summary>
 
-![lisp](../_images/lisp-01.png)
+![lisp](./images/lisp-01.png)
 
   </details>
 
@@ -17,7 +17,7 @@ Scheme 是 Lisp 的方言版本。
   <details class="details-image">
     <summary>图片</summary>
 
-![lisp](../_images/lisp-02.png)
+![lisp](./images/lisp-02.png)
 
   </details>
   
@@ -29,7 +29,7 @@ DrRacket 的上半部分负责命名，下半部分负责运算。上半部分�
 <details class="details-image">
   <summary>图片</summary>
 
-![lisp](../_images/lisp-03.png)
+![lisp](./images/lisp-03.png)
 
 </details>
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import IconProxyTransparentWrapper from '../_components/IconProxyTransparentWrapper.vue'
+import IconProxyTransparentWrapper from '@/_components/IconProxyTransparentWrapper.vue'
 </script>
 
 # Proxy 和 Reflect

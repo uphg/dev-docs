@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import VueVirtualDom from '../_components/VueVirtualDom.vue'
+import VueVirtualDom from '@/_components/VueVirtualDom.vue'
 </script>
 
 # 框架设计概览
