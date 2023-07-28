@@ -94,6 +94,7 @@ const fullStack = [
   },
   {
     text: 'Web 性能优化',
+    collapsed: false,
     items: createItems('/full-stack/', [
       { text: 'HTTP', link: '/http' },
       { text: '浏览器渲染原理', link: '/browser-rendering-principle' }
