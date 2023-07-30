@@ -14,7 +14,7 @@ tags:
 
 Express 中间件模型
 
-![Express 中间件模型](../_images/express-middleware.jpg)
+![Express 中间件模型](../../_images/express-middleware.jpg)
 
 ## 创建一个 Express 项目
 

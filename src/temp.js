@@ -1,46 +1,32 @@
-if (j > oldEnd && j <= newEnd) {
-  // 省略部分代码
-} else if (j > newEnd && j <= oldEnd) {
-  // 省略部分代码
-} else {
-  // 构造 source 数组
-  const count = newEnd - j + 1
-  const source = new Array(count)
-  source.fill(-1)
+function patchChildren(n1, n2, container) {
+  if (typeof n2.children === 'string') {
+    // 省略部分代码
+  } else if (Array.isArray(n2.children)) {
+    const oldChildren = n1.children
+    const newChildren = n2.children
 
-  const oldStart = j
-  const newStart = j
-  let moved = false
-  let pos = 0
-  const keyIndex = {}
-  for(let i = newStart; i <= newEnd; i++) {
-    keyIndex[newChildren[i].key] = i
-  }
-  // 新增 patched 变量，代表更新过的节点数量
-  let patched = 0
-  for(let i = oldStart; i <= oldEnd; i++) {
-    oldVNode = oldChildren[i]
-    // 如果更新过的节点数量小于等于需要更新的节点数量，则执行更新
-    if (patched <= count) {
-      const k = keyIndex[oldVNode.key]
-      if (typeof k !== 'undefined') {
-        newVNode = newChildren[k]
-        patch(oldVNode, newVNode, container)
-        // 每更新一个节点，都将 patched 变量 +1
-        patched++
-        source[k - newStart] = i
-        if (k < pos) {
-          moved = true
-        } else {
-          pos = k
+    // 用来存储寻找过程中遇到的最大索引值
+    let lastIndex = 0
+    for (let i = 0; i < newChildren.length; i++) {
+      const newVNode = newChildren[i]
+      for (let j = 0; j < oldChildren.length; j++) {
+        const oldVNode = oldChildren[j]
+        if (newVNode.key === oldVNode.key) {
+          patch(oldVNode, newVNode, container)
+          if (j < lastIndex) {
+            // 如果当前找到的节点在旧 children 中的索引小于最大索引值 lastIndex，
+            // 说明该节点对应的真实 DOM 需要移动
+          } else {
+            // 如果当前找到的节点在旧 children 中的索引不小于最大索引值，
+            // 则更新 lastIndex 的值
+            lastIndex = j
+          }
+          break // 这里需要 break
         }
-      } else {
-        // 没找到
-        unmount(oldVNode)
       }
-    } else {
-      // 如果更新过的节点数量大于需要更新的节点数量，则卸载多余的节点
-      unmount(oldVNode)
     }
+
+  } else {
+    // 省略部分代码
   }
 }

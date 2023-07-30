@@ -13,11 +13,11 @@ tags:
 3. 确认输入 `docker --version` 后返回版本号
 4. 设置国内镜像，镜像的地址为：`https://docker.mirrors.ustc.edu.cn/`
 
-  ![Docker 添加国内镜像](../_images/docker-configures-domestic-mirrors.jpg)
+  ![Docker 添加国内镜像](../../_images/docker-configures-domestic-mirrors.jpg)
 
 5. 给 Docker 配置自己的阿里云镜像
 
-  ![阿里云容器镜像加速配置](../_images/alibaba-cloud-container-image-acceleration.jpg)
+  ![阿里云容器镜像加速配置](../../_images/alibaba-cloud-container-image-acceleration.jpg)
   
 5. 确保命令行输入 `docker run hello-world` 时输出 Hello from Docker!
 6. 如果无法安装新版，请查看旧版教程
@@ -156,7 +156,7 @@ Ctrl + D 可以退出当前环境，键入 `\c` 清除当前输入语句。
 
 DBMS 的结构图
 
-![DBMS 结构图](../_images/dbms-system-diagram.png)
+![DBMS 结构图](../../_images/dbms-system-diagram.png)
 
 ## 使用 Node.js 创建数据库
 

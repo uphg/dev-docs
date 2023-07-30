@@ -97,7 +97,9 @@ const fullStack = [
     collapsed: false,
     items: createItems('/full-stack/', [
       { text: 'HTTP', link: '/http' },
-      { text: '浏览器渲染原理', link: '/browser-rendering-principle' }
+      { text: '浏览器渲染原理', link: '/browser-rendering-principle' },
+      { text: '开发者工具', link: '/dev-tools' },
+      { text: '什么是连接复用', link: '/connection-multiplexing' }
     ])
   },
   {

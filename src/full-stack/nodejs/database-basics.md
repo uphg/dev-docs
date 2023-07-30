@@ -17,15 +17,15 @@ tags:
 
 首先是第一范式（1NF）。**1NF 的定义为：符合 1NF 的关系中的每个属性都不可再分。表1**所示的情况，就不符合 1NF 的要求。
 
-![表1](../_images/database-first-normal-form-demo1.png)
+![表1](../../_images/database-first-normal-form-demo1.png)
 
 实际上，**1NF 是所有关系型数据库的最基本要求**，你在关系型数据库管理系统（RDBMS），例如 SQL Server，Oracle，MySQL 中创建数据表的时候，如果数据表的设计不符合这个最基本的要求，那么操作一定是不能成功的。也就是说，只要在 RDBMS 中已经存在的数据表，一定是符合 1NF 的。如果我们要在 RDBMS 中表现表中的数据，就得设计为**表2**的形式：
 
-![表2](../_images/database-first-normal-form-demo2.png)
+![表2](../../_images/database-first-normal-form-demo2.png)
 
 但是仅仅符合 1NF 的设计，仍然会存在数据冗余过大，插入异常，删除异常，修改异常的问题，例如对于**表3**中的设计：
 
-![表2](../_images/database-first-normal-form-demo3.jpg)
+![表2](../../_images/database-first-normal-form-demo3.jpg)
 
 1. 每一名学生的学号、姓名、系名、系主任这些数据重复多次。每个系与对应的系主任的数据也重复多次——**数据冗余过大**。
 2. 假如学校新建了一个系，但是暂时还没有招收任何学生（比如3月份就新建了，但要等到8月份才招生），那么是无法将系名与系主任的数据单独地添加到数据表中去的——**插入异常**
@@ -50,7 +50,7 @@ tags:
 
 使用第二范式改进**表3**：
 
-![第二范式示例表](../_images/database-second-paradigm.png)
+![第二范式示例表](../../_images/database-second-paradigm.png)
 
 **第二范式的问题**
 
@@ -66,7 +66,7 @@ tags:
 
 使用第三范式改进**表4**：
 
-![第三范式示例表](../_images/database-third-paradigm.png)
+![第三范式示例表](../../_images/database-third-paradigm.png)
 
 现在我们来看一下，进行同样的操作，是否还存在着之前的那些问题？
 
@@ -215,29 +215,29 @@ mysql> select users.name as uname, orders.amount as amount
 
 inner join 一般被译作内连接。内连接查询能将左表（表 A）和右表（表 B）中能关联起来的数据连接后返回。
 
-![inner join 图示](../_images/database-basics-inner-join.png)
+![inner join 图示](../../_images/database-basics-inner-join.png)
 
 ### left join
 
 left join 一般被译作左连接，也写作 left outer join。左连接查询会返回左表（表 A）中所有记录，不管右表（表 B）中有没有关联的数据。在右表中找到的关联数据列也会被一起返回。
 
-![left join 图示](../_images/database-basics-left-join.png)
+![left join 图示](../../_images/database-basics-left-join.png)
 
 ### right join
 
 right join 一般被译作右连接，也写作 right outer join。右连接查询会返回右表（表 B）中所有记录，不管左表（表 A）中有没有关联的数据。在左表中找到的关联数据列也会被一起返回。
 
-![right join 图示](../_images/database-basics-right-join.png)
+![right join 图示](../../_images/database-basics-right-join.png)
 
 ### full outer join
 
 full outer join 一般被译作外连接、全连接，实际查询语句中可以写作 full outer join 或 full join。外连接查询能返回左右表里的所有记录，其中左右表里能关联起来的记录被连接后返回。
 
-![full outer join 图示](../_images/database-basics-full-outer-join.png)
+![full outer join 图示](../../_images/database-basics-full-outer-join.png)
 
 以上四种，就是 SQL 里常见 join 的种类和概念了，看一下它们的合影：
 
-![四种基本 join 图示](../_images/database-basics-join-bases.png)
+![四种基本 join 图示](../../_images/database-basics-join-bases.png)
 
 下面是 join 的延伸用法
 
@@ -245,25 +245,25 @@ full outer join 一般被译作外连接、全连接，实际查询语句中可�
 
 返回左表有但右表没有关联数据的记录集。
 
-![left join excluding inner join 图示](../_images/database-basics-left-join-excluding-inner-join.png)
+![left join excluding inner join 图示](../../_images/database-basics-left-join-excluding-inner-join.png)
 
 ### right join excluding inner join
 
 返回右表有但左表没有关联数据的记录集。
 
-![right join excluding inner join 图示](../_images/database-basics-right-join-excluding-inner-join.png)
+![right join excluding inner join 图示](../../_images/database-basics-right-join-excluding-inner-join.png)
 
 ### full outer join excluding inner join
 
 返回左表和右表里没有相互关联的记录集。
 
-![full outer join excluding inner join 图示](../_images/database-basics-full-outer-join-excluding-inner-join.png)
+![full outer join excluding inner join 图示](../../_images/database-basics-full-outer-join-excluding-inner-join.png)
 
 ### 总结
 
 以上七种用法基本上可以覆盖各种 join 查询了。全家福
 
-![七种常用 join 图示](../_images/database-basics-join-all.png)
+![七种常用 join 图示](../../_images/database-basics-join-all.png)
 
 
 ### 使用 inner join 关联两个表

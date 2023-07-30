@@ -14,7 +14,7 @@ tags:
 
 ## 概念图
 
-![Stream 流示例](../_images/stream-demo.png)
+![Stream 流示例](../../_images/stream-demo.png)
 
 - stream 是水流，默认没有水
 - stream.write 可以让水流中有水（数据）
@@ -83,7 +83,7 @@ server.listen(8888)
 
 `stream.pipe(response)` 表示 将 stream 读到的文件通过管道连接到 response 响应体中。
 
-![pipe 管道示例图](../_images/stream-pipe-demo.png)
+![pipe 管道示例图](../../_images/stream-pipe-demo.png)
 
 - 两个流可以用一个管道相连
 - stream1 的末尾连上 stream2 的开头

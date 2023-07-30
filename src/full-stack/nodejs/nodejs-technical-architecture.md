@@ -104,13 +104,13 @@ EventLoop 执行顺序图示
 
 ::: details 图示
 
-![EventLoop 执行顺序图示](../_images/nodejs-eventloop-process.jpg)
+![EventLoop 执行顺序图示](../../_images/nodejs-eventloop-process.jpg)
 
 :::
 
 ## Node.js 工作流程
 
-![Node.js 工作流程](../_images/nodejs-process.jpg)
+![Node.js 工作流程](../../_images/nodejs-process.jpg)
 
 ## setTimeout & setImmediate 的执行顺序
 

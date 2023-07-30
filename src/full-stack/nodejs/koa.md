@@ -11,7 +11,7 @@ date: 2022-03-19T09:38:31+08:00
 
 Koa 中间件模型
 
-![Koa 中间件模型](../_images/koa-middleware.jpg)
+![Koa 中间件模型](../../_images/koa-middleware.jpg)
 
 ## 创建一个 Koa 服务
 

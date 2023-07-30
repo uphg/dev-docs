@@ -328,7 +328,7 @@ export default PostsIndex
 
 前端通过存储在 `<script type="application/json">` 标签的 JSON 数据获取与后端同步的数据 posts。 
 
-![SSG 静态页渲染](../_images/nextjs-ssg-demo.jpg)
+![SSG 静态页渲染](../../_images/nextjs-ssg-demo.jpg)
 
 ### 静态化的时机
 
