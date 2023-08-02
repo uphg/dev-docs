@@ -1,4 +1,4 @@
----
+<!-- ---
 title: Node.js 环境搭建
 date: 2021-12-04T21:56:55+08:00
 tags:
@@ -6,7 +6,9 @@ tags:
   - npm
   - pnpm
   - yarn
----
+--- -->
+
+# Node.js 环境搭建
 
 ## 安装 Node.js
 
@@ -308,8 +310,6 @@ pnpm list -P # 仅显示生产环境的依赖（dependencies/optionalDependencie
 pnpm list --global
 ```
 
-### pnpm 
-
 ### pnpm create
 
 使用 create-* 启用套件来创建一个项目
@@ -319,6 +319,12 @@ pnpm create react-app my-app
 pnpm create vite my-vue-app
 ```
 
+::: danger
+
+永远不要运行 `pnpm setup` 命令，它会绑定你的 pnpm 包路径到 c 盘，并且造成全局包无法查找它的相关依赖的问题
+
+:::
+
 ## yarn
 
 Yarn 也是一个包管理器，它与 npm 比最大的优势就是可以并行安装多个包（虽然 npm 现在也优化了这点）
@@ -327,7 +333,7 @@ Yarn 也是一个包管理器，它与 npm 比最大的优势就是可以并行�
 
 打开[官网](https://classic.yarnpkg.com/en/docs/install/#windows-stable)，点击如下内容下载
 
-![安装 yarn 步骤图示](../../_images/node-env-yarn-install.jpg)
+![安装 yarn 步骤图示](/images/node-env-yarn-install.jpg)
 
 ### yarn add
 

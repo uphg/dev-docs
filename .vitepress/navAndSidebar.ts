@@ -99,7 +99,8 @@ const fullStack = [
       { text: 'HTTP', link: '/http' },
       { text: '浏览器渲染原理', link: '/browser-rendering-principle' },
       { text: '开发者工具', link: '/dev-tools' },
-      { text: '什么是连接复用', link: '/connection-multiplexing' }
+      { text: '什么是连接复用', link: '/connection-multiplexing' },
+      { text: '多路复用', link: '/multiplexing' }
     ])
   },
   {
@@ -109,6 +110,12 @@ const fullStack = [
       { text: 'Docker 环境搭建', link: '/docker-env' }
     ])
   },
+  {
+    text: '其他',
+    items: createItems('/full-stack/nodejs/', [
+      { text: 'Node.js 环境搭建', link: '/node-env-setup' }
+    ])
+  }
 ]
 
 const Other = [
