@@ -100,7 +100,8 @@ const fullStack = [
       { text: '浏览器渲染原理', link: '/browser-rendering-principle' },
       { text: '开发者工具', link: '/dev-tools' },
       { text: '什么是连接复用', link: '/connection-multiplexing' },
-      { text: '多路复用', link: '/multiplexing' }
+      { text: '多路复用', link: '/multiplexing' },
+      { text: 'Web 性能优化', link: '/web-perf-optimization' }
     ])
   },
   {
