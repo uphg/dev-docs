@@ -6,6 +6,25 @@
 - 安装 VS Code 拓展：[Remote Development](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)
 - 给[Docker 镜像加速](https://www.runoob.com/docker/docker-mirror-acceleration.html)
 
+## Docker 命令
+
+```bash
+# 重启容器
+docker start db-for-xxx
+```
+
+查看 docker 状态
+
+```bash
+docker ps 
+docker ps -a
+```
+
+查看 log
+
+```bash
+docker logs
+```
 
 ## WSL Ubuntu error 0x80004002 报错
 
@@ -57,6 +76,12 @@ PS C:\WINDOWS\system32> Enable-WindowsOptionalFeature -Online -FeatureName Micro
 
 > 退出 irb：按下 Ctrl + D（也可以输入 Ctrl + Z 或 Ctrl + C），这会发送一个 EOF（输入结束）信号，导致 irb 退出
 
+重新登录
+
+```bash
+zsh --login
+rvm use 3
+```
 
 **关于 oh-my-env 的配置**
 
@@ -70,7 +95,7 @@ PS C:\WINDOWS\system32> Enable-WindowsOptionalFeature -Online -FeatureName Micro
 
 ## 环境说明
 
-工作空间
+**工作空间**
 
 - oh-my-env 会自动映射为 /workspaces/oh-my-env。
 - 该目录里的文件是**内外共享**的，性能一般。
@@ -124,11 +149,15 @@ code mangosteen-1
 
 # 新建终端
 bundle exe rails server # 关闭 bundle server 请按 Ctrl + C
+# or bundle exe rails s
+# or bin/rails s
 ```
 
 看到 ActiveRecord::ConnectionNotEstablished 报错后继续
 
 **启动数据库**
+
+在 Windows 命令行中运行一个 docker 作为数据库容器
 
 ```bash
 # 创建 postgresql
@@ -158,9 +187,170 @@ bundle exe rails server
 
 如果运行 `gem install rails -v 7.0.2.3` 有以下错误，可以重新再运行一词
 
+```
 cc1: note: unrecognized command-line option ‘-Wno-self-assign’ may have been intended to silence earlier diagnostics
-cc1: note: unrecognized command-line option ‘-Wno-parentheses-equality’ may have been intended to silence earlier diagnostics
-cc1: note: unrecognized command-line option ‘-Wno-constant-logical-operand’ may have been intended to silence earlier diagnostics
+```
 
+## 创建数据表
 
+可以使用建模工具，创建数据模型
+
+```bash
+bin/rails g model user email:string name:string
+```
+
+上面命令在 xxx 目录创建了两个文件，分别是：`app/models/user.rb`、`db/migrate/20230809075251_create_users.rb`
+
+**同步到数据库**
+
+```bash
+bin/rails db:migrate
+```
+
+**反悔命令**
+
+如果你运行同步后需要修改表内容，或者之前内容有误，可以运行以下命令撤销，step 表示撤销的步数
+
+```bash
+bin/rails  db:rollback step=1
+```
+
+运行该命令你会发现它调用了 drop_table，但其实你并没有写该方法，这是 rails 自动根据你的表内容帮你生成的。
+
+## 创建路由
+
+在 `config/routes.rb` 中添加以下内容
+
+```ruby
+Rails.application.routes.draw do
+  post '/users', to: 'users#create'
+  get '/users/:id', to: 'users#show'
+end
+```
+
+该内容表示，当收到 POST 请求并且路径为 `/users` 时，调用 users 的 create 方法。当收到 GET 请求并且路径为 `/users/:id` 时调用 users 的 show 方法。
+
+**创建 Controller**
+
+添加了对应的路由后，我们要创建对应的方法，也就是 Controller
+
+```bash
+bin/rails g controller users show create
+```
+
+该命令会在 `config/routes` 下创建两个路由，并在 `app/controllers/users_controller.rb` 中分别创建 show create 方法
+
+删除默认创建的路由，用我们自己写的更精确
+
+```ruby{2-3}
+Rails.application.routes.draw do
+  get 'users/show'
+  get 'users/create'
+  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+
+  # Defines the root path route ("/")
+  # root "articles#index"
+  post '/users', to: 'users#create'
+  get '/users/:id', to: 'users#show'
+end
+```
+
+在两个接口调用的对应方法中添加 log
+
+```ruby
+class UsersController < ApplicationController
+  def show
+    p '你访问了 show'
+  end
+
+  def create
+    p '你访问了 create'
+  end
+end
+```
+
+重启服务器并测试接口
+
+```sh
+bin/rails s
+
+curl -X POST http://127.0.0.1:3000/users
+```
+
+如果请求成功，你会在控制台看到 "你访问了 create" 的log
+
+创建用户并存入数据库
+
+```ruby
+class UsersController < ApplicationController
+  def create
+    user = User.new name: 'jack'
+    if user.save
+      render json: user
+    else
+      render json: user.errors
+    end
+  end
+end
+```
+
+上面的内容表示，创建一个 user 对象，如果保存成功就返回创建的 user 对象，如果失败返回一个 user.errors
+
+添加邮箱验证，在 app/models/user.rb 中添加以下内容，表示验证邮箱
+
+```ruby
+class User < ApplicationRecord
+  validates :email, presence: true
+end
+```
+
+重新 curl 会返回
+
+```json
+{"email":["can't be blank"]}
+```
+
+然后补充 email 方法
+
+```ruby
+class UsersController < ApplicationController
+  def create
+    user = User.new email: 'jack@a.com', name: 'jack'
+    if user.save
+      render json: user
+    else
+      render json: user.errors
+    end
+  end
+end
+```
+
+再次 curl 会返回以下内容
+
+```json
+{"id":1,"email":"jack@a.com","name":"jack","created_at":"2023-08-09T08:40:08.748Z","updated_at":"2023-08-09T08:40:08.748Z"}
+```
+
+实现 show 方法
+
+```ruby
+class UsersController < ApplicationController
+  def create
+    ...
+  end
+
+  def show
+    user = User.find_by_id params[:id]
+    if user
+      render json: user
+    else
+      head 404
+    end
+  end
+end
+```
+
+其中 find_by_id 是 rails 根据你的数据库生成的查找方法，可以查找用户 id 对应数据，如果找不到就返回 404 响应。
+
+使用 `curl http://127.0.0.1:3000/users/2` 测试该方法，如果 id 不存在，会返回 404
 

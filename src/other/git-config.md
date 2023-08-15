@@ -74,6 +74,12 @@ git config --global core.quotepath false
 git config --global core.editor "vim"
 ```
 
+## 取消历史缓存
+
+```bash
+git rm -r --cached dist
+```
+
 ## GitHub 提交报错
 
 ```tsx

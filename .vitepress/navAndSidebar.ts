@@ -1,10 +1,4 @@
-/**
- * 前端
- * -------------------------------------------------------------------------- */
-
 import { DefaultTheme } from "vitepress"
-
-// 全栈
 
 const frontend = [
   {
@@ -63,8 +57,31 @@ const frontend = [
 
 const fullStack = [
   {
-    text: 'Node.js 全解',
+    text: '记账项目',
     collapsed: false,
+    items: createItems('/full-stack/bookkeeping/', [
+      { text: 'Docker 环境搭建', link: '/docker-env' },
+      { text: 'RESTful API', link: '/restful-api' },
+      { text: '后端单元测试', link: '/backend-unit-tests' },
+      { text: '部署上线', link: '/deployment-online' },
+      { text: 'Rails 密钥管理', link: '/rails-key-management' }
+    ])
+  },
+  {
+    text: 'Web 性能优化',
+    collapsed: false,
+    items: createItems('/full-stack/', [
+      { text: 'HTTP', link: '/http' },
+      { text: '浏览器渲染原理', link: '/browser-rendering-principle' },
+      { text: '开发者工具', link: '/dev-tools' },
+      { text: '什么是连接复用', link: '/connection-multiplexing' },
+      { text: '多路复用', link: '/multiplexing' },
+      { text: 'Web 性能优化', link: '/web-perf-optimization' }
+    ])
+  },
+  {
+    text: 'Node.js 全解',
+    collapsed: true,
     items: createItems('/full-stack/nodejs/', [
       { text: 'Node.js 技术架构', link: '/nodejs-technical-architecture'},
       { text: '文件模块', link: '/nodejs-fs-file'},
@@ -84,7 +101,7 @@ const fullStack = [
   },
   {
     text: 'Webpack 源码',
-    collapsed: false,
+    collapsed: true,
     items: createItems('/full-stack/nodejs/', [
       { text: 'AST、babel、依赖', link: '/webpack-ast-babel-and-rely' },
       { text: 'Webpack 核心原理', link: '/webpack-core' },
@@ -93,26 +110,8 @@ const fullStack = [
     ])
   },
   {
-    text: 'Web 性能优化',
-    collapsed: false,
-    items: createItems('/full-stack/', [
-      { text: 'HTTP', link: '/http' },
-      { text: '浏览器渲染原理', link: '/browser-rendering-principle' },
-      { text: '开发者工具', link: '/dev-tools' },
-      { text: '什么是连接复用', link: '/connection-multiplexing' },
-      { text: '多路复用', link: '/multiplexing' },
-      { text: 'Web 性能优化', link: '/web-perf-optimization' }
-    ])
-  },
-  {
-    text: '记账',
-    collapsed: false,
-    items: createItems('/full-stack/', [
-      { text: 'Docker 环境搭建', link: '/docker-env' }
-    ])
-  },
-  {
     text: '其他',
+    collapsed: true,
     items: createItems('/full-stack/nodejs/', [
       { text: 'Node.js 环境搭建', link: '/node-env-setup' }
     ])

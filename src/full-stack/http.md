@@ -27,22 +27,3 @@ Content-Encoding: gzip
 ```
 
 Content-Type 写法格式查阅 MIME Type
-
-
-```mermaid
-%%{init: {'theme': 'base'}}%%
-        graph TD
-          A[Christmas] -->|Get money| B(Go shopping)
-          B --> C{Let me think}
-          B --> G[/Another/]
-          C ==>|One| D[Laptop]
-          C -->|Two| E[iPhone]
-          C -->|Three| F[fa:fa-car Car]
-          subgraph section
-            C
-            D
-            E
-            F
-            G
-          end
-```
