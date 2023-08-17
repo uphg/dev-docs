@@ -333,7 +333,7 @@ Yarn 也是一个包管理器，它与 npm 比最大的优势就是可以并行�
 
 打开[官网](https://classic.yarnpkg.com/en/docs/install/#windows-stable)，点击如下内容下载
 
-![安装 yarn 步骤图示](/images/node-env-yarn-install.jpg)
+![安装 yarn 步骤图示](../images/node-env-yarn-install.jpg)
 
 ### yarn add
 
