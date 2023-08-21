@@ -1,8 +1,26 @@
-# Git 配置
+# Git 使用手册
+
+## 撤销 commit
+
+```bash
+git reset --soft HEAD^
+```
+
+- HEAD^ 的意思是上一个版本，也可以写成 HEAD~1
+- 如果进行了 2 次 commit 想都撤回，可以使用 HEAD~2
+
+
+## 取消历史缓存
+
+```bash
+git rm -r --cached dist
+```
+
+## 关联远程 Git
 
 如何生成本机 SSH，并关联远程 Git
 
-## 生成本机 SSH
+### 生成本机 SSH
 
 在命令行运行
 
@@ -60,11 +78,10 @@ cat ~/.ssh/id_rsa.pub
     # 看到以下内容表示成功
     Hi Jack! You've successfully authenticated, but GitHub does not provide shell access.
     ```
-    
 
-## 添加至 GitHub
+### 配置 Git 默认设置
 
-## 配置 Git 默认设置
+为了方便提交时展示你的信息，需要配置默认用户设置
 
 ```jsx
 git config --global user.name 你的英文名   # 不需要跟GitHub账号保持一致
@@ -72,12 +89,6 @@ git config --global user.email 你的邮箱    # 不需要跟GitHub账号保持�
 git config --global push.default matching
 git config --global core.quotepath false
 git config --global core.editor "vim"
-```
-
-## 取消历史缓存
-
-```bash
-git rm -r --cached dist
 ```
 
 ## GitHub 提交报错
@@ -96,6 +107,8 @@ Port 443
 ```
 
 ## commit 类型
+
+提交类型规范
 
 - feat: 新功能、新特性
 - fix: 修改 bug
