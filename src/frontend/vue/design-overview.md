@@ -54,7 +54,7 @@ div.textContent = 'hello vue3' // 直接修改
 
 声明式
 
-```js
+```html
 <!-- 之前： -->
 <div @click="() => alert('ok')">hello world</div>
 <!-- 之后： -->

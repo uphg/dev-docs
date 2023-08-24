@@ -65,7 +65,8 @@ const fullStack = [
       { text: '后端单元测试', link: '/backend-unit-tests' },
       { text: '部署上线', link: '/deployment-online' },
       { text: 'Rails 密钥管理', link: '/rails-key-management' },
-      { text: '部署到云服务器', link: '/deploy-cloud-server' }
+      { text: '部署到云服务器', link: '/deploy-cloud-server' },
+      { text: '使用 Rails 发送邮件', link: '/rails-send-email' }
     ])
   },
   {
