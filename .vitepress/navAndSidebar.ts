@@ -66,7 +66,9 @@ const fullStack = [
       { text: '部署上线', link: '/deployment-online' },
       { text: 'Rails 密钥管理', link: '/rails-key-management' },
       { text: '部署到云服务器', link: '/deploy-cloud-server' },
-      { text: '使用 Rails 发送邮件', link: '/rails-send-email' }
+      { text: '使用 Rails 发送邮件', link: '/rails-send-email' },
+      { text: 'JWT 的定义与用法', link: '/jwt-usage' },
+      { text: '你会做WEB上的用户登录功能吗？（转）', link: '/web-login' }
     ])
   },
   {
