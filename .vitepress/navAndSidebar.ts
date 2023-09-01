@@ -27,15 +27,23 @@ const frontend = [
     ])
   },
   {
+    text: 'Vue.js',
+    collapsed: false,
+    items: createItems('/frontend/vue/', [
+      { text: 'Vue2 API', link: '/vue2-api' },
+      { text: 'Vue3 API', link: '/vue3-api' },
+    ])
+  },
+  {
     text: 'Vue 设计与实现',
     collapsed: false,
-    items: createItems('/frontend/', [
-      { text: '框架设计概览', link: '/vue/design-overview' },
-      { text: 'Vue.js 设计思路', link: '/vue/design-ideas' },
-      { text: '响应系统的作用与实现', link: '/vue/response-system' },
-      { text: '非原始值 & 原始值响应方案', link: '/vue/non-primitive-response' },
-      { text: '渲染器', link: '/vue/renderer' },
-      { text: 'Diff 算法', link: '/vue/diff' },
+    items: createItems('/frontend/vue/', [
+      { text: '框架设计概览', link: '/design-overview' },
+      { text: 'Vue.js 设计思路', link: '/design-ideas' },
+      { text: '响应系统的作用与实现', link: '/response-system' },
+      { text: '非原始值 & 原始值响应方案', link: '/non-primitive-response' },
+      { text: '渲染器', link: '/renderer' },
+      { text: 'Diff 算法', link: '/diff' },
     ])
   },
   {
