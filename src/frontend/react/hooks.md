@@ -51,48 +51,42 @@ function useRouter() {
 
 ## useContext
 
-从组件中获取 context，使用示例
+从组件中获取 context，例如可以使用 context 切换当前 CSS 主题：
 
 ```js
-import { createContext, useContext } from 'react';
+import { useState, createContext, useContext } from "react";
+import "./styles.css";
 
-const ThemeContext = createContext(null);
+const themeContext = createContext(null);
 
-export default function MyApp() {
+function App() {
+  const [theme, setTheme] = useState("light");
   return (
-    <ThemeContext.Provider value="dark">
-      <Form />
-    </ThemeContext.Provider>
-  )
-}
-
-function Form() {
-  return (
-    <Panel title="Welcome">
-      <Button>Sign up</Button>
-      <Button>Log in</Button>
-    </Panel>
+    <themeContext.Provider value={{ theme, setTheme }}>
+      <div className={`App ${theme}`}>
+        <p>{theme}</p>
+        <ChildA/>
+        <ChildB/>
+      </div>
+    </themeContext.Provider>
   );
 }
 
-function Panel({ title, children }) {
-  const theme = useContext(ThemeContext);
-  const className = 'panel-' + theme;
+function ChildA() {
+  const { setTheme } = useContext(themeContext);
   return (
-    <section className={className}>
-      <h1>{title}</h1>
-      {children}
-    </section>
-  )
+    <div>
+      <button onClick={() => setTheme("light")}>light</button>
+    </div>
+  );
 }
 
-function Button({ children }) {
-  const theme = useContext(ThemeContext);
-  const className = 'button-' + theme;
+function ChildB() {
+  const { setTheme } = useContext(themeContext);
   return (
-    <button className={className}>
-      {children}
-    </button>
+    <div>
+      <button onClick={() => setTheme("dark")}>dark</button>
+    </div>
   );
 }
 ```
