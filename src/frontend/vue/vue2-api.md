@@ -2,10 +2,9 @@
 
 ## 全局 API
 
-### Vue.extend(options)
+### Vue.extend
 
-- 使用基础 Vue 构造器，创建一个“子类”。参数是一个包含组件选项的对象。
-- `data` 选项是特例，需要注意 - 在 `Vue.extend()` 中它必须是函数
+使用基础 Vue 构造器，创建一个“子类”。参数是一个包含组件选项的对象。`data` 选项是特例，需要注意在 `Vue.extend()` 中它必须是函数
 
   ```vue
   <div id="mount-point"></div>
@@ -27,82 +26,67 @@
   new Profile().$mount('#mount-point')
   ```
 
-### Vue.nextTick([callback, context])
+### Vue.nextTick
 
-- 全局调用，会返回一个 Promise
+全局调用，会返回一个 Promise
 
-  ```js
-  // 修改数据
-  vm.msg = 'Hello'
-  Vue.nextTick(function () {
-    // DOM 更新了
-  })
+```js
+// 修改数据
+vm.msg = 'Hello'
+Vue.nextTick(function () {
+  // DOM 更新了
+})
 
-  // 作为一个 Promise 使用
-  Vue.nextTick()
-    .then(function () {
-      // DOM 更新了
-    })
-  ```
+// 作为一个 Promise 使用
+Vue.nextTick().then(function () {
+  // DOM 更新了
+})
+```
 
-### Vue.set(target, propertyName/index, value)
+### Vue.set
 
-- 向响应式对象中添加一个 property，并确保这个新 property 同样是响应式的，且触发视图更新。
+- 向响应式对象中添加一个属性，并确保这个新属性同样是响应式的，且触发视图更新。
 - 这个方法主要是解决 Vue 无法探测普通的新增 property (比如 `this.myObject.newProperty = 'hi'`)。
 
-### Vue.delete(target, propertyName/index)
+```js
+Vue.set(target, propertyName/index, value)
+```
+
+### Vue.delete
 
 - 删除对象的 property。如果对象是响应式的，确保删除能触发更新视图。
 - 这个方法主要用于避开 Vue 不能检测到 property 被删除的限制，但是你应该很少会使用它。
 
-### Vue.directive(id, \[definition\])
+```js
+Vue.delete(target, propertyName/index)
+```
 
-- 注册或获取全局指令。
+### Vue.directive
 
-  ```js
-  // 注册
-  Vue.directive('my-directive', {
-    bind() {},
-    inserted() {},
-    update() {},
-    componentUpdated() {},
-    unbind() {}
-  })
+注册或获取全局指令。
 
-  // 注册 (指令函数)
-  Vue.directive('my-directive', function () {
-    // 这里将会被 `bind` 和 `update` 调用
-  })
+```js
+// 注册
+Vue.directive('my-directive', {
+  bind() {},
+  inserted() {},
+  update() {},
+  componentUpdated() {},
+  unbind() {}
+})
 
-  // 获取，返回已注册的指令
-  var myDirective = Vue.directive('my-directive')
-  ```
+// 注册 (指令函数)
+Vue.directive('my-directive', function () {
+  // 这里将会被 `bind` 和 `update` 调用
+})
 
-### Vue.mixin(mixin)
+// 获取，返回已注册的指令
+var myDirective = Vue.directive('my-directive')
+```
 
-- 全局注册一个混入，影响注册之后所有创建的每个 Vue 实例。
-- 插件作者可以使用混入，向组件注入自定义的行为。**不推荐在应用代码中使用**。
+### Vue.mixin
 
-### vm.$mount(\[elementOrSelector\])
-
-- 使用 `vm.$mount()` 手动地挂载一个未挂载的实例。
-
-  ```js
-  var MyComponent = Vue.extend({
-    template: '<div>Hello!</div>'
-  })
-
-  // 方法一：创建并挂载到 #app (会替换 #app)
-  new MyComponent().$mount('#app')
-
-  // 方法二：同上
-  new MyComponent({ el: '#app' })
-
-  // 方法三：在文档之外渲染并且随后挂载
-  var component = new MyComponent().$mount()
-  document.getElementById('app').appendChild(component.$el)
-  ```
-
+全局注册一个混入，影响注册之后所有创建的每个 Vue 实例。插件作者可以使用混入，向组件注入自定义的行为。**不推荐在应用代码中使用**。
 
 ## 生命周期
 
@@ -110,93 +94,80 @@
 
 ### beforeCreate
 
-- 在实例初始化之后,进行数据侦听和事件/侦听器的配置（watch）之前同步调用。
+- 在实例初始化之后,进行数据侦听和事件/侦听器的配置之前同步调用。
 - 会在实例初始化完成、`props` 解析之后、`data()` 和 `computed` 等选项处理之前立即调用。
 
 ### created
 
-- 在实例创建完成后被立即同步调用。在这一步中，实例已完成对选项的处理，意味着以下内容已被配置完毕：数据侦听、计算属性、方法、事件/侦听器的回调函数。然而，挂载阶段还没开始，且 `$el` property 目前尚不可用。
+- 在实例创建完成后被立即同步调用。
+- 在这一步中，实例已完成对选项的处理，意味着以下内容已被配置完毕：数据侦听、计算属性、方法、事件/侦听器的回调函数。
+- 然而，挂载阶段还没开始，且 `$el` property 目前尚不可用。
 
 ### beforeMount
 
-在挂载开始之前被调用：相关的 `render` 函数首次被调用。
-
-**该钩子在服务器端渲染期间不被调用。**
+- 在挂载开始之前被调用：相关的 `render` 函数首次被调用。
+- **该钩子在服务器端渲染期间不被调用。**
 
 ### mounted
 
-实例被挂载后调用，这时 `el` 被新创建的 `vm.$el` 替换了。如果根实例挂载到了一个文档内的元素上，当 `mounted` 被调用时 `vm.$el` 也在文档内。
+- 实例被挂载后调用，这时 `el` 被新创建的 `vm.$el` 替换了。
+- 如果根实例挂载到了一个文档内的元素上，当 `mounted` 被调用时 `vm.$el` 也在文档内。
+- **该钩子在服务器端渲染期间不被调用。**
+- 注意 `mounted` **不会**保证所有的子组件也都被挂载完成。如果你希望等到整个视图都渲染完毕再执行某些操作，可以在 `mounted` 内部使用 [vm.$nextTick](https://v2.cn.vuejs.org/v2/api/#vm-nextTick)：
 
-注意 `mounted` **不会**保证所有的子组件也都被挂载完成。如果你希望等到整个视图都渲染完毕再执行某些操作，可以在 `mounted` 内部使用 [vm.$nextTick](https://v2.cn.vuejs.org/v2/api/#vm-nextTick)：
-
-```
-mounted: function () {
-  this.$nextTick(function () {
-    // 仅在整个视图都被渲染之后才会运行的代码
-  })
-}
-```
-
-**该钩子在服务器端渲染期间不被调用。**
+  ```
+  mounted: function () {
+    this.$nextTick(function () {
+      // 仅在整个视图都被渲染之后才会运行的代码
+    })
+  }
+  ```
 
 ### beforeUpdate
 
-在数据发生改变后，DOM 被更新之前被调用。这里适合在现有 DOM 将要被更新之前访问它，比如移除手动添加的事件监听器。
-
-**该钩子在服务器端渲染期间不被调用，因为只有初次渲染会在服务器端进行。**
+- 在数据发生改变后，DOM 被更新之前被调用。
+- 这里适合在现有 DOM 将要被更新之前访问它，比如移除手动添加的事件监听器。
+- **该钩子在服务器端渲染期间不被调用，因为只有初次渲染会在服务器端进行。**
 
 ### updated
 
-在数据更改导致的虚拟 DOM 重新渲染和更新完毕之后被调用。
-
-当这个钩子被调用时，组件 DOM 已经更新，所以你现在可以执行依赖于 DOM 的操作。然而在大多数情况下，你应该避免在此期间更改状态。如果要相应状态改变，通常最好使用[计算属性](https://v2.cn.vuejs.org/v2/api/#computed)或 [watcher](https://v2.cn.vuejs.org/v2/api/#watch) 取而代之。
-
-注意，`updated` **不会**保证所有的子组件也都被重新渲染完毕。如果你希望等到整个视图都渲染完毕，可以在 `updated` 里使用 [vm.$nextTick](https://v2.cn.vuejs.org/v2/api/#vm-nextTick)：
-
-```
-updated: function () {
-  this.$nextTick(function () {
-    //  仅在整个视图都被重新渲染之后才会运行的代码     
-  })
-}
-```
-
-**该钩子在服务器端渲染期间不被调用。**
-
+- 在数据更改导致的虚拟 DOM 重新渲染和更新完毕之后被调用。
+- 当这个钩子被调用时，组件 DOM 已经更新，所以你现在可以执行依赖于 DOM 的操作。
+- **该钩子在服务器端渲染期间不被调用。**
+- 注意，`updated` **不会**保证所有的子组件也都被重新渲染完毕。如果你希望等到整个视图都渲染完毕，可以在 `updated` 里使用 [vm.$nextTick](https://v2.cn.vuejs.org/v2/api/#vm-nextTick)：
+  ```js
+  updated: function () {
+    this.$nextTick(function () {
+      //  仅在整个视图都被重新渲染之后才会运行的代码     
+    })
+  }
+  ```
 
 ### activated
 
-被 keep-alive 缓存的组件激活时调用。
-
-**该钩子在服务器端渲染期间不被调用。**
+- 被 keep-alive 缓存的组件激活时调用。
+- **该钩子在服务器端渲染期间不被调用。**
 
 ### deactivated
 
-被 keep-alive 缓存的组件失活时调用。
-
-**该钩子在服务器端渲染期间不被调用。**
+- 被 keep-alive 缓存的组件失活时调用。
+- **该钩子在服务器端渲染期间不被调用。**
 
 ### beforeDestroy
 
-实例销毁之前调用。在这一步，实例仍然完全可用。
-
-**该钩子在服务器端渲染期间不被调用。**
+- 实例销毁之前调用。在这一步，实例仍然完全可用。
+- **该钩子在服务器端渲染期间不被调用。**
 
 ### destroyed
 
-实例销毁后调用。该钩子被调用后，对应 Vue 实例的所有指令都被解绑，所有的事件监听器被移除，所有的子实例也都被销毁。
+- 实例销毁后调用。该钩子被调用后，对应 Vue 实例的所有指令都被解绑，所有的事件监听器被移除，所有的子实例也都被销毁。
 
 **该钩子在服务器端渲染期间不被调用。**
 
 ### errorCaptured
 
-在捕获一个来自后代组件的错误时被调用。此钩子会收到三个参数：错误对象、发生错误的组件实例以及一个包含错误来源信息的字符串。此钩子可以返回 `false` 以阻止该错误继续向上传播。
-
-::: tip
-
-你可以在此钩子中修改组件的状态。因此在捕获错误时，在模板或渲染函数中有一个条件判断来绕过其它内容就很重要；不然该组件可能会进入一个无限的渲染循环。
-
-:::
+- 在捕获一个来自后代组件的错误时被调用。此钩子会收到三个参数：错误对象、发生错误的组件实例以及一个包含错误来源信息的字符串。此钩子可以返回 `false` 以阻止该错误继续向上传播。
+- 你可以在此钩子中修改组件的状态。因此在捕获错误时，在模板或渲染函数中有一个条件判断来绕过其它内容就很重要；不然该组件可能会进入一个无限的渲染循环。
 
 
 **错误传播规则**
@@ -257,6 +228,26 @@ new Vue({
 
 ## 实例方法
 
+### vm.$mount
+
+使用 `vm.$mount()` 手动地挂载一个未挂载的实例。
+
+```js
+var MyComponent = Vue.extend({
+  template: '<div>Hello!</div>'
+})
+
+// 方法一：创建并挂载到 #app (会替换 #app)
+new MyComponent().$mount('#app')
+
+// 方法二：同上
+new MyComponent({ el: '#app' })
+
+// 方法三：在文档之外渲染并且随后挂载
+var component = new MyComponent().$mount()
+document.getElementById('app').appendChild(component.$el)
+```
+
 ### vm.$nextTick
 
 可以在当前组件实例调用。
@@ -295,7 +286,7 @@ vm.$delete(target, propertyName/index)
 
 ## Vuex
 
-Vuex 是一个专为 Vue.js 应用程序开发的**状态管理模式**。
+Vuex 是一个专为 Vue.js 应用程序开发的**状态管理模式**。它主要是为了解决在大型应用中的全局状态共享问题。
 
 ### State
 

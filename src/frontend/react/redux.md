@@ -160,7 +160,7 @@ reducer 函数用于规范 state 的创建流程。根据 action 的类型，它
 
 ### dispatch
 
-dispatch 函数用于规范 setState 的流程。它接受一个action对象作为参数，并根据 action 的类型调用 reducer 函数来更新状态。
+dispatch 函数用于规范 setState 的流程。它接受一个 action 对象作为参数，并根据 action 的类型调用 reducer 函数来更新状态。
 
 ### connect
 

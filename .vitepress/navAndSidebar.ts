@@ -2,31 +2,6 @@ import { DefaultTheme } from "vitepress"
 
 const frontend = [
   {
-    text: 'JavaScript',
-    collapsed: false,
-    items: createItems('/frontend/', [
-      { text: 'Iterable object（可迭代对象）', link: '/vanilla/iterable-object' },
-      { text: 'Generator', link: '/vanilla/generators' },
-      { text: '异步迭代和 generator', link: '/vanilla/async-iterators-generators' },
-      { text: 'Proxy 和 Reflect', link: '/vanilla/proxy' },
-      { text: '常用方法实现', link: '/vanilla/api-implemented' },
-    ]) 
-  },
-  {
-    text: 'TypeScript',
-    collapsed: false,
-    items: createItems('/frontend/', [
-      { text: '类型基础', link: '/typescript/basics' },
-      { text: '类型兼容', link: '/typescript/compatible' },
-      { text: '函数', link: '/typescript/function' },
-      { text: '泛型', link: '/typescript/generics' },
-      { text: 'Class', link: '/typescript/class' },
-      { text: '类型体操', link: '/typescript/gymnastics' },
-      { text: '在项目中使用', link: '/typescript/used-in-the-project' },
-      { text: 'TypeScript Config', link: '/typescript/config' }
-    ])
-  },
-  {
     text: 'Vue.js',
     collapsed: false,
     items: createItems('/frontend/vue/', [
@@ -51,7 +26,9 @@ const frontend = [
     collapsed: false,
     items: createItems('/frontend/react/', [
       { text: 'Lisp 入门', link: '/lisp' },
-      { text: '面向对象核心', link: '/object-oriented-core' }
+      { text: '面向对象核心', link: '/object-oriented-core' },
+      { text: 'React Hooks API', link: '/hooks.md' },
+      { text: 'useState 实现原理', link: '/use-state.md' },
     ])
   },
   {
@@ -60,7 +37,32 @@ const frontend = [
     items: createItems('/frontend/react-native/', [
       { text: '环境搭建', link: '/environment-setup'},
     ])
-  }
+  },
+  {
+    text: 'JavaScript',
+    collapsed: false,
+    items: createItems('/frontend/', [
+      { text: 'Iterable object（可迭代对象）', link: '/vanilla/iterable-object' },
+      { text: 'Generator', link: '/vanilla/generators' },
+      { text: '异步迭代和 generator', link: '/vanilla/async-iterators-generators' },
+      { text: 'Proxy 和 Reflect', link: '/vanilla/proxy' },
+      { text: '常用方法实现', link: '/vanilla/api-implemented' },
+    ]) 
+  },
+  {
+    text: 'TypeScript',
+    collapsed: false,
+    items: createItems('/frontend/', [
+      { text: '类型基础', link: '/typescript/basics' },
+      { text: '类型兼容', link: '/typescript/compatible' },
+      { text: '函数', link: '/typescript/function' },
+      { text: '泛型', link: '/typescript/generics' },
+      { text: 'Class', link: '/typescript/class' },
+      { text: '类型体操', link: '/typescript/gymnastics' },
+      { text: '在项目中使用', link: '/typescript/used-in-the-project' },
+      { text: 'TypeScript Config', link: '/typescript/config' }
+    ])
+  },
 ]
 
 const fullStack = [
