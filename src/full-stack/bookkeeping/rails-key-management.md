@@ -48,13 +48,13 @@ Rails：我支持多环境密钥
 生产环境
 
 ```bash
-EDITOR="code --wait" rails credentials:edit --environment production
+$ EDITOR="code --wait" rails credentials:edit --environment production
 ```
 
 打开 ruby 控制台
 
 ```bash
-RAILS_ENV=production rails c
+$ RAILS_ENV=production rails c
 ```
 
 获取 key
@@ -76,7 +76,7 @@ $ EDITOR="code --wait" bin/rails credentials:edit
 运行以下命令，将复制的 secret_key_base 粘贴至生产环境
 
 ```bash
-EDITOR="code --wait" rails credentials:edit --environment production
+$ EDITOR="code --wait" rails credentials:edit --environment production
 ```
 
 然后删除 `config/master.key`、`config/credentials.yml.enc`，重新运行
@@ -111,7 +111,7 @@ $ curl localhost:3000/api/v1/items -v
 会返回 500 报错，说明还没有创建数据库，运行以下代码创建
 
 ```bash
-docker exec -it mangosteen-prod-1 bin/rails db:create db:migrate
+$ docker exec -it mangosteen-prod-1 bin/rails db:create db:migrate
 ```
 
 再次测试请求即可成功。
@@ -122,10 +122,10 @@ docker exec -it mangosteen-prod-1 bin/rails db:create db:migrate
 
 ```bash
 # 进入 bash 脚本
-docker exec -it mangosteen-prod-1 bash
+$ docker exec -it mangosteen-prod-1 bash
 
 # 删除数据库
-DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/rails db:drop
+$ DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bin/rails db:drop
 ```
 
 :::

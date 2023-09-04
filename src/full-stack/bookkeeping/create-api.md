@@ -68,3 +68,9 @@ groups = groups.sort { |a, b| a[:happen_at] <=> b[:happen_at] }
 # 可以写为，"!" 表示根据排序改变原数组
 groups.sort! { |a, b| a[:happen_at] <=> b[:happen_at] }
 ```
+
+第一次部署到生产环境
+
+```bash
+$ need_migrate=1 bin/pack_for_remote.sh
+```
