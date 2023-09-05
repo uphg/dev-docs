@@ -1,16 +1,50 @@
 # Git 使用手册
 
-## 撤销 commit
+## git stash
+
+该命令保存本地的修改，并还原工作目录以匹配 HEAD 提交。也就是恢复为上次 commit 之后文件未更改的状态。
 
 ```bash
+git stash
+
+git stash pop
+```
+
+### 本地与远程提交冲突
+
+假如我们本地提交与远程提交相互冲突了，这么做
+
+```bash
+git stash save "本地缓存内容标识" # 把本地的改动暂存起来
+git pull                         # 拉取远端分支
+git stash pop                    # 将栈顶改动内容重新加回本地分支
+```
+
+### 改动分支切换
+
+如果原本要在 dev 分支修改代码，但忘记了，在 master 分支修改后，可以这么做
+
+```bash
+git stash save "本地缓存内容标识" # 把本地当前改动暂存起来
+git checkout dev                 # 切换到需要改动的分支
+git stash pop                    # 将改动 pop 到自己当前的分支
+```
+
+## git reset
+
+撤销 commit
+
+```bash
+# 撤销本次提交的 commit
 git reset --soft HEAD^
 ```
 
 - HEAD^ 的意思是上一个版本，也可以写成 HEAD~1
 - 如果进行了 2 次 commit 想都撤回，可以使用 HEAD~2
 
+## git rm
 
-## 取消历史缓存
+取消历史缓存
 
 ```bash
 git rm -r --cached dist
@@ -106,7 +140,7 @@ Hostname ssh.github.com
 Port 443
 ```
 
-## commit 类型
+## commit 规范
 
 提交类型规范
 

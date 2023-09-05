@@ -1,29 +1,4 @@
-# 快速创建 API 流程
-
-创建 model
-
-```bash
-# 创建 model
-$ bin/rails g model tag user:references name:string sign:string deleted_at:datetime
-
-# 运行 db:mgrate
-$ bin/rails db:migrate
-
-# 创建 controller
-$ bin/rails g controller api/v1/tags_controller
-
-# 实现功能测试 & 及功能代码实现
-$ rspec
-
-# 生成测试文档
-$ bin/rake docs:generate
-
-# 创建追加数据表方法
-$ bin/rails g migration AddKindToItem
-
-# 添加数据表对应字段
-$ bin/rails db:migrate
-```
+# ruby 笔记
 
 获取参数中不为空的字段
 
@@ -69,8 +44,18 @@ groups = groups.sort { |a, b| a[:happen_at] <=> b[:happen_at] }
 groups.sort! { |a, b| a[:happen_at] <=> b[:happen_at] }
 ```
 
-第一次部署到生产环境
+class 声明属性
 
-```bash
-$ need_migrate=1 bin/pack_for_remote.sh
+```ruby
+class Session
+  include ActiveModel::Model
+  attr_accessor :email
+  attr_accessor :code
+end
+
+# 可以简写为
+class Session
+  include ActiveModel::Model
+  attr_accessor :email, :code
+end
 ```

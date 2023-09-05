@@ -47,6 +47,7 @@ const frontend = [
       { text: '异步迭代和 generator', link: '/vanilla/async-iterators-generators' },
       { text: 'Proxy 和 Reflect', link: '/vanilla/proxy' },
       { text: '常用方法实现', link: '/vanilla/api-implemented' },
+      { text: 'ES6 常用 API', link: '/vanilla/es6' },
     ]) 
   },
   {
@@ -71,6 +72,7 @@ const fullStack = [
     collapsed: false,
     items: createItems('/full-stack/bookkeeping/', [
       { text: 'Docker 环境搭建', link: '/docker-env' },
+      { text: 'Docker 操作手册', link: 'docker' },
       { text: 'RESTful API', link: '/restful-api' },
       { text: '后端单元测试', link: '/backend-unit-tests' },
       { text: '部署上线', link: '/deployment-online' },
@@ -78,6 +80,8 @@ const fullStack = [
       { text: '部署到云服务器', link: '/deploy-cloud-server' },
       { text: '使用 Rails 发送邮件', link: '/rails-send-email' },
       { text: 'JWT 的定义与用法', link: '/jwt-usage' },
+      { text: 'Rails 手册', link: '/rails' },
+      { text: 'Ruby 笔记', link: '/ruby' },
       { text: '你会做WEB上的用户登录功能吗？（转）', link: '/web-login' }
     ])
   },
