@@ -1,5 +1,46 @@
 # React Hooks API
 
+## useReducer
+
+在组件中使用 Reducer
+
+```js
+import { useState, useReducer } from "react"
+
+const initial = {
+  n: 0
+};
+
+const reducer = (state, action) => {
+  if (action.type === "add") {
+    return { n: state.n + action.number };
+  } else if (action.type === "multi") {
+    return { n: state.n * 2 };
+  } else {
+    throw new Error("unknown type");
+  }
+};
+
+function App() {
+  const [state, dispatch] = useReducer(reducer, initial);
+  const { n } = state;
+  const onClick = () => {
+    dispatch({ type: "add", number: 1 });
+  };
+  const onClick2 = () => {
+    dispatch({ type: "add", number: 2 });
+  };
+  return (
+    <div className="App">
+      <h1>n: {n}</h1>
+
+      <button onClick={onClick}>+1</button>
+      <button onClick={onClick2}>+2</button>
+    </div>
+  );
+}
+```
+
 ## useCallback
 
 在重新 render 时缓存函数，只有在第二个数组中内容改变时才更新。
@@ -91,23 +132,7 @@ function ChildB() {
 }
 ```
 
-## useDeferredValue
 
-延迟更新 UI 的一部分。
-
-- 在 React 18 之前，渲染是同步的。这意味着一旦 React 开始渲染，在它完成渲染组件之前，没有什么可以阻止它。
-- 但是，对于并发渲染，React 可以暂停渲染并在稍后继续渲染，或者完全中止渲染。
-- 这是一个重要的新实现，使我们能够为用户提供更流畅的用户体验。让我们通过一个例子看看如何。
-
-```js
-import { useState, useDeferredValue } from 'react';
-
-function SearchPage() {
-  const [query, setQuery] = useState('');
-  const deferredQuery = useDeferredValue(query);
-  // ...
-}
-```
 
 ## useEffect
 
@@ -167,5 +192,23 @@ function PasswordField() {
       </p>
     </>
   );
+}
+```
+
+## useDeferredValue
+
+延迟更新 UI 的一部分。
+
+- 在 React 18 之前，渲染是同步的。这意味着一旦 React 开始渲染，在它完成渲染组件之前，没有什么可以阻止它。
+- 但是，对于并发渲染，React 可以暂停渲染并在稍后继续渲染，或者完全中止渲染。
+- 这是一个重要的新实现，使我们能够为用户提供更流畅的用户体验。让我们通过一个例子看看如何。
+
+```js
+import { useState, useDeferredValue } from 'react';
+
+function SearchPage() {
+  const [query, setQuery] = useState('');
+  const deferredQuery = useDeferredValue(query);
+  // ...
 }
 ```

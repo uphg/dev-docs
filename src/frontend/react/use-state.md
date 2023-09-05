@@ -24,9 +24,9 @@ function App() {
 
 分析上面的代码，你会发现以下特点：
 
-1. setN 一定会改变数据，将 n + 1 重新存入某个地方。
-2. setN 会触发 `<App/>` 重新渲染（re-render）。
-3. useState 会从缓存的数据中获取最新的 n。
+1.  setN 一定会改变数据，将 n + 1 重新存入某个地方。
+2.  setN 会触发 `<App/>` 重新渲染（re-render）。
+3.  useState 会从缓存的数据中获取最新的 n。
 
 ## 实现 useState
 
@@ -77,7 +77,7 @@ function useState(initialValue) {
 }
 ```
 
-上面的代码，我们将 _state 提取为一个外部变量，这样每次 useState 就不会重置 state。至此，我们已经实现了一个非常简易的 useState。
+上面的代码，我们将 \_state 提取为一个外部变量，这样每次 useState 就不会重置 state。至此，我们已经实现了一个非常简易的 useState。
 
 但目前的实现仍然存在问题，例如我们同时使用两个 useState：
 
@@ -121,11 +121,11 @@ function App() {
 ReactDOM.render(<App/>, rootElement)
 ```
 
-运行上面的代码，会发现，不论点击哪个按钮 a、b 都会同时改变。这是由于，我们将所有数据都放在一个 _state 中，导致 state 冲突。
+运行上面的代码，会发现，不论点击哪个按钮 a、b 都会同时改变。这是由于，我们将所有数据都放在一个 \_state 中，导致 state 冲突。
 
-首先想到的一种方案是：将 _state 改为一个 hash 对象，将值与每个 useState 一一对应，如 `_state = { a: 0, b: 0 }`，但我们并不知道变量 a、b 的属性名是什么，所以这个方法有缺陷。
+首先想到的一种方案是：将 \_state 改为一个 hash 对象，将值与每个 useState 一一对应，如 `_state = { a: 0, b: 0 }`，但我们并不知道变量 a、b 的属性名是什么，所以这个方法有缺陷。
 
-一种更好的方案是：把 _state 存储在一个数组中，如 `_state = [0, 0]`，这样可以保证数据一一对应，再次改良我们的 useState，如下：
+一种更好的方案是：把 \_state 存储在一个数组中，如 `_state = [0, 0]`，这样可以保证数据一一对应，再次改良我们的 useState，如下：
 
 ```js
 let _state = []
@@ -152,29 +152,28 @@ function App() {
   ...
 }
 
-ReactDOM.render(<App/>, rootElement)
+// mount ReactDOM ...
 ```
 
 再次运行，两个 useState 之间就不会相互影响了。至此，我们已经实现了一个单个组件可用的 useState。
 
 最后，上面的代码只支持单个组件，如果有多个组件怎么办？
 
-- 答案是每个组件都创建一个 _state 和 index。
+- 答案是每个组件都创建一个 \_state 和 index。
 
-但又有一个问题，这么多 _state 和 index 存放在哪里？重名了怎么办？
+但又有一个问题，这么多 \_state 和 index 存放在哪里？重名了怎么办？
 
-- 答案是可以存放在每个组件对应的虚拟 DOM 对象上。 
+- 答案是可以存放在每个组件对应的虚拟 DOM 对象上。
 
 ## 总结 useState 的实现
 
-1. 每个 React Component 函数都会对应一个 React 虚拟节点（对象）。
-2. 我们可以给每个节点保存独立的 state 和 index。
-3. useState 会读取对应的 state（state[index]）。
-4. 其中 index 由 useState 出现的顺序决定。
-5. setState 会修改 state，并且触发更新。
+1.  每个 React Component 函数都会对应一个 React 虚拟节点（对象）。
+2.  我们可以给每个节点保存独立的 state 和 index。
+3.  useState 会读取对应的 state（state\[index]）。
+4.  其中 index 由 useState 出现的顺序决定。
+5.  setState 会修改 state，并且触发更新。
 
-> 注：本文对 `React.useState` 的实现做了简化，实际上 React 虚拟节点是 FiberNode，_state 的真实名称应为 memorizedState，index 的实现用到了链表。感兴趣可以查看[阅读源码后，来讲讲React Hooks是怎么实现的](https://juejin.cn/post/6844903704437456909#heading-0)。
-
+> 注：本文对 `React.useState` 的实现做了简化，实际上 React 虚拟节点是 FiberNode，\_state 的真实名称应为 memorizedState，index 的实现用到了链表。感兴趣可以查看[阅读源码后，来讲讲React Hooks是怎么实现的](https://juejin.cn/post/6844903704437456909#heading-0)。
 
 讲完了 useState 的实现，我们再来分析 useState 的常见问题，或者说它不太符合预期的地方。
 
@@ -209,15 +208,13 @@ fucntion App() {
 
 上面的代码，如果你添加了 TypeScript 或 React 的 ESLint 规则提示，会报如下错误：
 
-![](./images/react-state-1.png)
+![react-state-1.png](./images/react-state-1.png)
 
-<!-- 内容大意为：useState 被有条件的调用，React Hooks 必须在每次渲染以相同的顺序调用。 -->
+这是因为，在 React 中，如果第一次渲染时 a 是第一个，b 是第二个，可能还有第三个 c...。那么，第二次渲染时，必须保证 useState 的顺序与第一次是完全一致的（也就是我们上面实现的根据索引确定 useState 顺序）。所以 React 中不允许出现上面的代码。
 
-这是因为：在 React 中，如果第一次渲染时 a 是第一个，b 是第二个，可能还有第三个 c...。那么，第二次渲染时，必须保证 useState 的顺序与第一次是完全一致的。所以 React 中不允许出现上面的代码。
+## state 更新原理
 
-## 关于 state
-
-创建一个按钮 +1 功能，并添加 log，它会在 3 秒后打印当前 n，如下：
+运行以下代码：
 
 ```js
 import { useState } from "react"
@@ -235,20 +232,22 @@ function App() {
     </div>
   )
 }
-
-// mount ReactDOM ...
 ```
+
+它创建一个按钮 +1 功能，并添加一个 log 按钮，该按钮会在 3 秒后打印当前 n。
 
 我们依次点击 +1 按钮和 log 按钮，控制台会在 3 秒后输出 `n: 1`。
 
-但如果我们先点击 log 按钮，再点击 +1 按钮，会发现 控制台输出的是 `n: 0`。
+但如果我们先点击 log 按钮，再点击 +1 按钮，会发现控制台输出的是 `n: 0`。
 
 **为什么会这样？**
 
-- 根据我们对 useState 的实现分析，是因为我们每次点击后重新 render 时，useState 返回的都是一个新的 `n`。
-- 这样就会导致，我们运行的 log 函数中绑定的 n 还是重新 render 之前的 n。所以必须在点击后再 log，保证每次 log 之前的 n 是最新的。
+结合我们对 useState 的实现分析，是因为：
+1. 当前组件每次重新 render 都会重新执行 useState，useState 每次执行都会返回一个新的 n。
+2. 我们运行的 log 函数中绑定的 n 还是重新 render 之前的 n。所以必须在点击后再 log，保证每次 log 之前的 n 是最新的。
+3. 这就是 React 的数据的不可变性。
 
-但，我希望我的 n 总是最新的，怎么办？
+如果，我希望我的 n 总是最新的，怎么办？
 
 我们可以使用 useRef，如下：
 
@@ -271,12 +270,62 @@ function App() {
     </div>
   )
 }
-
-// mount ReactDOM ...
 ```
 
 利用 useState 每次会重新 render 的功能和 useRef 相结合，就可以实现既能拿到最新 n，又可以重新 render。
 
 如果你使用过 Vue3 的 Composition API。你就会发现，上面的方式与 Vue 的 ref 很像。实际上，Vue3 就是借鉴了 React Hooks 的思想，结合了数据响应式实现的 ref。
 
-<p align="center">完~</p>
+## 用函数设置 setState
+
+首先一个可选的优化就是，在每次使用 useState 声明一个复杂的变量时，用函数 return 的方式。
+
+```js
+function App() {
+  const [user, setUser] = useState(() => ({ name: 'Jack', age: 18 + 8 }))
+}
+```
+
+这是因为每次重新 render，useState 都会被重新执行。导致它传入的变量也会被重新解析，但如果我们使用函数回调，它只有在函数需要执行时才解析该函数。
+
+其次，在 setState 时，尽量使用函数 return 的方式。考虑如下场景，假如我们连续调用两次 setState
+
+```js
+function App() {
+  const [n, setN] = useState(0)
+  const onClick = () => {
+    setN(n + 1)
+    setN(n + 1) 
+  }
+
+  return (
+    <div>
+      <h1>n: {n}</h1>
+      <button onClick={onClick}></button>
+    </div>
+  )
+}
+```
+
+你会发现，点击按钮，n 只能 +1，而不是 +2。这主要是因为，这两个 n 的值是同一个值。想要避免，就要使用函数 return，它会每次都获取最新的 n，如下：
+
+```js
+function App() {
+  const [n, setN] = useState(0)
+  const onClick = () => {
+    setN((x) => x + 1)
+    setN((x) => x + 1) 
+  }
+
+  return (
+    <div>
+      <h1>n: {n}</h1>
+      <button onClick={onClick}></button>
+    </div>
+  )
+}
+```
+
+理论上你应该在任何使用 setState 的地方都用函数 return 的形式，这样更加严谨。
+
+以上就是我总结的 useState 的实现，以及它的优化、应用场景。
