@@ -3,7 +3,6 @@ import { fileURLToPath } from 'url'
 import { nav, sidebar } from './navAndSidebar'
 import { withMermaid } from "vitepress-plugin-mermaid";
 
-
 // https://vitepress.dev/reference/site-config
 export default defineConfig(withMermaid({
   base: '/dev-docs/',
