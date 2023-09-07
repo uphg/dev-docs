@@ -37,7 +37,7 @@ JDK11 下载地址：[Java Development Kit](https://jdk.java.net/java-se-ri/11)
 
 打开环境变量配置，创建一个指向 `ANDROID_HOME` Android SDK 路径的新用户变量
 
-![ANDROID_HOME](../../_images/android_home.png)
+![ANDROID_HOME](../_images/android_home.png)
 
 SDK 默认安装在以下位置
 

@@ -80,7 +80,7 @@ setTimeout(() => {
 
 上面代码中的响应系统，有很多缺点，比如由于 effect 没有与对象建立一一对应的关系，无法根据对象、对象的 key 区分 effect。我们可以封装一个树形结构，专门存放对应对象某个属性的 effect，该结构如下：
 
-![建立对象与 effect 的联系](../../_images/vue-response-system.jpg)
+![建立对象与 effect 的联系](../_images/vue-response-system.jpg)
 
 实现代码如下：
 
@@ -155,7 +155,7 @@ effectFn 内部存在一个 obj.ok 值，当该值变化时，会执行不同分
 
 但分支切换可能会产生遗留的副作用函数，导致 obj.ok 和 obj.text 对应的依赖都会收集 effectFn
 
-![遗留的副作用函数](../../_images/vue-response-system-2.jpg)
+![遗留的副作用函数](../_images/vue-response-system-2.jpg)
 
 这样即使代码中的 obj.ok 为 false，再次尝试修改 obj.text 的值
 
@@ -167,7 +167,7 @@ obj.text = 'hello vue3'
 
 解决这个问题的思路很简单，每次副作用函数执行时，我们可以先把它从所有与之关联的依赖集合中删除，如图所示。
 
-![3.4](../../_images/vue-response-system-3.jpg)
+![3.4](../_images/vue-response-system-3.jpg)
 
 在 effect 添加一个依赖集合，并在每次副作用函数执行前清除之前的依赖
 
