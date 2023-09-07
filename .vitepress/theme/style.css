@@ -144,42 +144,6 @@
   --scrollbar-color-pressed: rgba(255, 255, 255, 0.35);
 }
 
-.VPSidebar::-webkit-scrollbar {
-  width: var(--scrollbar-size);
-  height: var(--scrollbar-size);
-}
-
-.VPSidebar::-webkit-scrollbar-thumb {
-  border-radius: calc(var(--scrollbar-size) / 2);
-  background-color: var(--scrollbar-color);
-}
-
-.VPSidebar::-webkit-scrollbar-thumb:hover {
-  background-color: var(--scrollbar-color-pressed);
-}
-
-.VPSidebar::-webkit-scrollbar-track {
-  background-color: transparent;
-}
-
-.vp-doc div[class*='language-'] > pre::-webkit-scrollbar {
-  width: var(--scrollbar-size);
-  height: var(--scrollbar-size);
-}
-
-.vp-doc div[class*='language-'] > pre::-webkit-scrollbar-thumb {
-  border-radius: calc(var(--scrollbar-size) / 2);
-  background-color: rgba(255, 255, 255, 0.25);
-}
-
-.vp-doc div[class*='language-'] > pre::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(255, 255, 255, 0.35);
-}
-
-.vp-doc div[class*='language-'] > pre::-webkit-scrollbar-track {
-  background-color: transparent;
-}
-
 
 /* .VPDoc (页面样式) */
 :root {

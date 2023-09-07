@@ -1,10 +1,39 @@
 import { DefaultTheme } from "vitepress"
 
-const frontend = [
+const vanilla = [
+  {
+    text: 'JavaScript',
+    collapsed: false,
+    items: createItems('/vanilla/', [
+      { text: 'Iterable object（可迭代对象）', link: '/iterable-object' },
+      { text: 'Generator', link: '/generators' },
+      { text: '异步迭代和 generator', link: '/async-iterators-generators' },
+      { text: 'Proxy 和 Reflect', link: '/proxy' },
+      { text: '常用方法实现', link: '/api-implemented' },
+      { text: 'ES6 常用 API', link: '/es6' },
+    ]) 
+  },
+  {
+    text: 'TypeScript',
+    collapsed: false,
+    items: createItems('/typescript/', [
+      { text: '类型基础', link: '/basics' },
+      { text: '类型兼容', link: '/compatible' },
+      { text: '函数', link: '/function' },
+      { text: '泛型', link: '/generics' },
+      { text: 'Class', link: '/class' },
+      { text: '类型体操', link: '/gymnastics' },
+      { text: '在项目中使用', link: '/used-in-the-project' },
+      { text: 'TypeScript Config', link: '/config' }
+    ])
+  },
+]
+
+const vue = [
   {
     text: 'Vue.js',
     collapsed: false,
-    items: createItems('/frontend/vue/', [
+    items: createItems('/vue/', [
       { text: 'Vue2 API', link: '/vue2-api' },
       { text: 'Vue3 API', link: '/vue3-api' },
     ])
@@ -12,7 +41,7 @@ const frontend = [
   {
     text: 'Vue 设计与实现',
     collapsed: false,
-    items: createItems('/frontend/vue/', [
+    items: createItems('/vue/', [
       { text: '框架设计概览', link: '/design-overview' },
       { text: 'Vue.js 设计思路', link: '/design-ideas' },
       { text: '响应系统的作用与实现', link: '/response-system' },
@@ -21,10 +50,13 @@ const frontend = [
       { text: 'Diff 算法', link: '/diff' },
     ])
   },
+]
+
+const react = [
   {
     text: 'React',
     collapsed: false,
-    items: createItems('/frontend/react/', [
+    items: createItems('/react/', [
       { text: 'Lisp 入门', link: '/lisp' },
       { text: '面向对象核心', link: '/object-oriented-core' },
       { text: 'React Hooks API', link: '/hooks.md' },
@@ -34,34 +66,8 @@ const frontend = [
   {
     text: 'React Native',
     collapsed: false,
-    items: createItems('/frontend/react-native/', [
+    items: createItems('/react/', [
       { text: '环境搭建', link: '/environment-setup'},
-    ])
-  },
-  {
-    text: 'JavaScript',
-    collapsed: false,
-    items: createItems('/frontend/', [
-      { text: 'Iterable object（可迭代对象）', link: '/vanilla/iterable-object' },
-      { text: 'Generator', link: '/vanilla/generators' },
-      { text: '异步迭代和 generator', link: '/vanilla/async-iterators-generators' },
-      { text: 'Proxy 和 Reflect', link: '/vanilla/proxy' },
-      { text: '常用方法实现', link: '/vanilla/api-implemented' },
-      { text: 'ES6 常用 API', link: '/vanilla/es6' },
-    ]) 
-  },
-  {
-    text: 'TypeScript',
-    collapsed: false,
-    items: createItems('/frontend/', [
-      { text: '类型基础', link: '/typescript/basics' },
-      { text: '类型兼容', link: '/typescript/compatible' },
-      { text: '函数', link: '/typescript/function' },
-      { text: '泛型', link: '/typescript/generics' },
-      { text: 'Class', link: '/typescript/class' },
-      { text: '类型体操', link: '/typescript/gymnastics' },
-      { text: '在项目中使用', link: '/typescript/used-in-the-project' },
-      { text: 'TypeScript Config', link: '/typescript/config' }
     ])
   },
 ]
@@ -140,7 +146,7 @@ const Other = [
   {
     text: '环境配置',
     items: [
-      { text: 'Git 配置', link: '/other/git-config' },
+      { text: 'Git 使用手册', link: '/other/git-config' },
       { text: 'ChatGPT 常用提示语', link: '/other/prompt' }
     ]
   }
@@ -152,9 +158,19 @@ export const nav = [
     link: '/'
   },
   {
-    text: '前端',
-    activeMatch: '/frontend/',
-    link: frontend[0].items[0].link!
+    text: 'Vanilla',
+    activeMatch: /\/vanilla\/|\/typescript\//,
+    link: vanilla[0].items[0].link
+  },
+  {
+    text: 'Vue.js',
+    activeMatch: '/vue/',
+    link: vue[0].items[0].link
+  },
+  {
+    text: 'React.js',
+    activeMatch: '/react/',
+    link: react[0].items[0].link
   },
   {
     text: '全栈',
@@ -169,7 +185,9 @@ export const nav = [
 ]
 
 export const sidebar = {
-  '/frontend/': frontend,
+  '/': vanilla,
+  '/vue/': vue,
+  '/react/': react,
   '/full-stack/': fullStack,
   '/other/': Other,
 }
