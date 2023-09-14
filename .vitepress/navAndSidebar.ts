@@ -59,8 +59,9 @@ const react = [
     items: createItems('/react/', [
       { text: 'Lisp 入门', link: '/lisp' },
       { text: '面向对象核心', link: '/object-oriented-core' },
-      { text: 'React Hooks API', link: '/hooks.md' },
       { text: 'useState 实现原理', link: '/use-state.md' },
+      { text: 'React Hooks API', link: '/hooks.md' },
+      { text: 'React 状态管理', link: '/status-management.md' },
     ])
   },
   {
@@ -136,8 +137,9 @@ const fullStack = [
   {
     text: '其他',
     collapsed: true,
-    items: createItems('/full-stack/nodejs/', [
-      { text: 'Node.js 环境搭建', link: '/node-env-setup' }
+    items: createItems('/full-stack/', [
+      { text: 'Node.js 环境搭建', link: '/nodejs/node-env-setup' },
+      { text: '', link: '/mac-env' }
     ])
   }
 ]
