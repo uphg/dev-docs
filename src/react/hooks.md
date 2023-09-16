@@ -681,11 +681,11 @@ function PasswordField() {
 
 ## useDeferredValue
 
-延迟更新 UI 的一部分。
+延迟更新 UI 的一部分。即：
 
-- 在 React 18 之前，渲染是同步的。这意味着一旦 React 开始渲染，在它完成渲染组件之前，没有什么可以阻止它。
-- 但是，对于并发渲染，React 可以暂停渲染并在稍后继续渲染，或者完全中止渲染。
-- 这是一个重要的新实现，使我们能够为用户提供更流畅的用户体验。让我们通过一个例子看看如何。
+- 在每次组件重新 render 时，如果当前值被修改了，会暂停渲染 UI，重新根据最新的值渲染 UI。
+
+> 在 React 18 之前，渲染是同步的。这意味着一旦 React 开始渲染，在它完成渲染组件之前，没有什么可以阻止它。
 
 ```js
 import { useState, useDeferredValue } from 'react';

@@ -325,4 +325,141 @@ Vue3 数据响应式，使用 Proxy 实现，支持以下功能拦截
 
 ## Promise 对象
 
-Promise 是异步编程的一种解决方案，比传统的解决方案——回调函数和事件——更合理和更强大。
+Promise 是异步编程的一种解决方案，比传统的解决方案——回调函数和事件——更合理和更强大。更多参考：[Promise](https://wangdoc.com/es6/promise)
+
+创建一个简单的 promise
+
+```js
+const promise = new Promise(function(resolve, reject) {
+  // ... some code
+
+  if (/* 异步操作成功 */){
+    resolve(value);
+  } else {
+    reject(error);
+  }
+});
+```
+
+### Promise.prototype.then
+
+Promise 状态改变时的回调函数，第一个参数是 resolved 状态回调函数，第二个参数是 rejected 状态回调函数
+
+```js
+promise.then(function(value) {
+  // success
+}, function(error) {
+  // failure
+});
+```
+
+### Promise.prototype.catch
+
+`Promise.prototype.catch()` 方法是 `.then(undefined, rejection)` 的别名，用于指定发生错误时的回调函数
+
+跟传统的 `try/catch` 代码块不同的是，如果没有使用 `catch()` 方法指定错误处理的回调函数，Promise 对象抛出的错误不会传递到外层代码，即不会有任何反应。
+
+```js
+const someAsyncThing = function() {
+  return new Promise(function(resolve, reject) {
+    // 下面一行会报错，因为x没有声明
+    resolve(x + 2);
+  });
+};
+
+someAsyncThing().then(function() {
+  console.log('everything is great');
+});
+
+setTimeout(() => { console.log(123) }, 2000);
+// Uncaught (in promise) ReferenceError: x is not defined
+// 123
+```
+
+浏览器运行到 `someAsyncThing()`，会打印出错误提示 `ReferenceError: x is not defined`，但是不会退出进程、终止脚本执行，2 秒之后还是会输出123。
+
+### Promise.prototype.finally
+
+finally 方法不管 Promise 对象最后状态如何，都会执行。
+
+它的实现原理也很简单，如下：
+
+```js
+Promise.prototype.finally = function (callback) {
+  let P = this.constructor;
+  return this.then(
+    value  => P.resolve(callback()).then(() => value),
+    reason => P.resolve(callback()).then(() => { throw reason })
+  );
+};
+```
+
+### Promise.all
+
+处理多个 Promise 对象，接收一个 Promise 对象数组作为参数。返回一个新的 Promise 对象，这个 Promise 对象只有所有输入的 Promise 对象都成功（）时才会被解决（），只要有一个失败，那么返回的 Promise 对象立刻失败，并且它的拒绝原因是第一个失败的 Promise 对象的拒绝原因。
+
+### Promise.race
+
+处理多个 Promise 对象，接收一个 Promise 对象数组为参数。只要数组中有一个 Promise 对象被处理或拒绝，就会立刻返回被处理/拒绝的结果。
+
+### Promise.allSettled
+
+有时候，我们希望等到一组异步操作都结束了，不管每一个操作是成功还是失败，再进行下一步操作。但 `Promise.all` 无法满足，为了解决这个问题，ES2020 引入了 `Promise.allSettled()` 方法，用来确定一组异步操作是否都结束了（不管成功或失败）。
+
+### Promise.try（第三方实现）
+
+实际开发中，经常遇到不想区分，函数 f 是同步函数还是异步操作，但是想用 Promise 来处理它。
+
+那么有没有一种方法，让同步函数同步执行，异步函数异步执行，并且让它们具有统一的 API 呢？回答是可以的，并且还有两种写法。第一种写法是用 `async` 函数来写。
+
+```js
+const f = () => console.log('now');
+(async () => f())();
+console.log('next');
+// now
+// next
+```
+
+上面代码中，第二行是一个立即执行的匿名函数，会立即执行里面的 `async` 函数，因此如果 `f` 是同步的，就会得到同步的结果；如果 `f` 是异步的，就可以用 `then` 指定下一步，就像下面的写法。
+
+```js
+(async () => f())()
+.then(...)
+```
+
+需要注意的是，`async () => f()` 会吃掉 `f()` 抛出的错误。所以，如果想捕获错误，要使用 `promise.catch` 方法。
+
+```js
+(async () => f())()
+.then(...)
+.catch(...)
+```
+
+第二种写法是使用 `new Promise()`
+
+```js
+const f = () => console.log('now');
+(
+  () => new Promise(
+    resolve => resolve(f())
+  )
+)();
+console.log('next');
+// now
+// next
+```
+
+上面代码也是使用立即执行的匿名函数，执行 `new Promise()`。这种情况下，同步函数也是同步执行的。
+
+
+鉴于这是一个很常见的需求，所以现在有一个提案，提供 `Promise.try` 方法替代上面的写法。
+
+```js
+const f = () => console.log('now');
+Promise.try(f);
+console.log('next');
+// now
+// next
+```
+
+事实上，`Promise.try` 存在已久，Promise 库 `Bluebird`、`Q` 和 `when`，早就提供了这个方法。

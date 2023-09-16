@@ -94,7 +94,7 @@ var myDirective = Vue.directive('my-directive')
 
 ### beforeCreate
 
-- 在实例初始化之后,进行数据侦听和事件/侦听器的配置之前同步调用。
+- 在实例初始化之后，进行数据侦听和事件/侦听器的配置之前同步调用。
 - 会在实例初始化完成、`props` 解析之后、`data()` 和 `computed` 等选项处理之前立即调用。
 
 ### created

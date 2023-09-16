@@ -1,4 +1,4 @@
-# 从零开始，解密 useState
+# useState 实现原理
 
 本文将通过一系列简单的示例来逐步演示如何实现 useState，以及在使用 useState 中遇到的问题，以帮助你快速理解 useState 实现原理和应用。
 
@@ -313,8 +313,8 @@ function App() {
 function App() {
   const [n, setN] = useState(0)
   const onClick = () => {
-    setN((x) => x + 1)
-    setN((x) => x + 1) 
+    setN((i) => i + 1)
+    setN((i) => i + 1) 
   }
 
   return (

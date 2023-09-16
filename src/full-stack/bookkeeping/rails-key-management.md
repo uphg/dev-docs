@@ -45,7 +45,7 @@ Rails.application.credentials.github[:key]
 
 Rails：我支持多环境密钥
 
-生产环境
+编辑生产环境密钥
 
 ```bash
 $ EDITOR="code --wait" rails credentials:edit --environment production

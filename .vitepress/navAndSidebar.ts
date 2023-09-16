@@ -89,6 +89,7 @@ const fullStack = [
       { text: 'JWT 的定义与用法', link: '/jwt-usage' },
       { text: 'Rails 手册', link: '/rails' },
       { text: 'Ruby 笔记', link: '/ruby' },
+      { text: '工厂模式', link: '/factory-pattern' },
       { text: '你会做WEB上的用户登录功能吗？（转）', link: '/web-login' }
     ])
   },
@@ -161,7 +162,7 @@ export const nav = [
   },
   {
     text: 'Vanilla',
-    activeMatch: /\/vanilla\/|\/typescript\//,
+    activeMatch: '/vanilla/|/typescript/',
     link: vanilla[0].items[0].link
   },
   {
