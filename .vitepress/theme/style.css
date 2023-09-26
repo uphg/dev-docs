@@ -89,64 +89,19 @@
   --docsearch-primary-color: var(--vp-c-brand) !important;
 }
 
-/**
- * Markdown: Custom Block
- * -------------------------------------------------------------------------- */
-
-:root {
-  --c-text: #2c3e50;
-  --c-tip-text: var(--c-text);
-  --c-tip: #318a62;
-  --c-tip-bg: #f3f4f5;
-}
-
-.dark {
-  --c-text: #adbac7;
-  --c-tip-bg: #2b313a;
-}
-
-.custom-block {
-  color: var(--vp-c-text-1);
-  background-color: transparent;
-  border: none;
-  border-radius: 0;
-  font-size: 1rem;
-
-  padding: 0.5rem 1.5rem;
-  border-left-width: .5rem;
-  border-left-style: solid;
-  margin: 1rem 0;
-}
-
-.custom-block .custom-block-title {
-  padding-top: 8px;
-  font-weight: 600;
-}
-
-.custom-block.tip {
-  border-color: var(--c-tip);
-  background-color: var(--c-tip-bg);
-  color: var(--c-tip-text);
-}
-
-/**
- * Scrollbar
- * -------------------------------------------------------------------------- */
-
-:root {
-  --scrollbar-size: 7px;
-  --scrollbar-color: rgba(0, 0, 0, 0.25);
-  --scrollbar-color-pressed: rgba(0, 0, 0, 0.4);
-}
-
-.dark {
-  --scrollbar-color: rgba(255, 255, 255, 0.25);
-  --scrollbar-color-pressed: rgba(255, 255, 255, 0.35);
-}
-
 
 /* .VPDoc (页面样式) */
 :root {
   --vp-font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco,
   Consolas, 'Microsoft Yahei', 'SimHei', 'Liberation Mono', 'Courier New', monospace
+}
+
+/* unocss */
+
+.w-80 {
+  width: 20rem;
+}
+
+.w-100 {
+  width: 25rem;
 }

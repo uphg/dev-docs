@@ -1,10 +1,10 @@
 import { DefaultTheme } from "vitepress"
 
-const vanilla = [
+const Frontend = [
   {
     text: 'JavaScript',
     collapsed: false,
-    items: createItems('/vanilla/', [
+    items: createItems('/frontend/', [
       { text: 'Iterable object（可迭代对象）', link: '/iterable-object' },
       { text: 'Generator', link: '/generators' },
       { text: '异步迭代和 generator', link: '/async-iterators-generators' },
@@ -75,28 +75,10 @@ const react = [
 
 const fullStack = [
   {
-    text: '记账项目',
-    collapsed: false,
-    items: createItems('/full-stack/bookkeeping/', [
-      { text: 'Docker 环境搭建', link: '/docker-env' },
-      { text: 'Docker 操作手册', link: 'docker' },
-      { text: 'RESTful API', link: '/restful-api' },
-      { text: '后端单元测试', link: '/backend-unit-tests' },
-      { text: '部署上线', link: '/deployment-online' },
-      { text: 'Rails 密钥管理', link: '/rails-key-management' },
-      { text: '部署到云服务器', link: '/deploy-cloud-server' },
-      { text: '使用 Rails 发送邮件', link: '/rails-send-email' },
-      { text: 'JWT 的定义与用法', link: '/jwt-usage' },
-      { text: 'Rails 手册', link: '/rails' },
-      { text: 'Ruby 笔记', link: '/ruby' },
-      { text: '工厂模式', link: '/factory-pattern' },
-      { text: '你会做WEB上的用户登录功能吗？（转）', link: '/web-login' }
-    ])
-  },
-  {
     text: 'Web 性能优化',
     collapsed: false,
     items: createItems('/full-stack/', [
+      { text: 'DNS 与 TCP', link: '/dns-tcp' },
       { text: 'HTTP', link: '/http' },
       { text: '浏览器渲染原理', link: '/browser-rendering-principle' },
       { text: '开发者工具', link: '/dev-tools' },
@@ -136,12 +118,60 @@ const fullStack = [
     ])
   },
   {
+    text: '记账项目',
+    collapsed: false,
+    items: createItems('/full-stack/bookkeeping/', [
+      { text: 'Docker 环境搭建', link: '/docker-env' },
+      { text: 'Docker 操作手册', link: 'docker' },
+      { text: 'RESTful API', link: '/restful-api' },
+      { text: '后端单元测试', link: '/backend-unit-tests' },
+      { text: '部署上线', link: '/deployment-online' },
+      { text: 'Rails 密钥管理', link: '/rails-key-management' },
+      { text: '部署到云服务器', link: '/deploy-cloud-server' },
+      { text: '使用 Rails 发送邮件', link: '/rails-send-email' },
+      { text: 'JWT 的定义与用法', link: '/jwt-usage' },
+      { text: 'Rails 手册', link: '/rails' },
+      { text: 'Ruby 笔记', link: '/ruby' },
+      { text: '工厂模式', link: '/factory-pattern' },
+      { text: '你会做WEB上的用户登录功能吗？（转）', link: '/web-login' }
+    ])
+  },
+  {
     text: '其他',
     collapsed: true,
     items: createItems('/full-stack/', [
       { text: 'Node.js 环境搭建', link: '/nodejs/node-env-setup' },
       { text: '', link: '/mac-env' }
     ])
+  }
+]
+
+const Interview = [
+  {
+    text: '金九银十',
+    items: createItems('/interview/', [
+      { text: 'HTML + CSS', link: '/html-css' },
+      { text: 'JavaScript 基础篇', link: 'js-base' },
+      { text: 'JavaScript 手写篇', link: 'js-handwriting' },
+      { text: 'DOM 押题', link: '/dom' },
+      { text: 'HTTP 押题', link: '/http' },
+      { text: 'Vue 押题', link: '/vue' },
+      { text: 'React 押题', link: '/react' },
+      { text: 'Node.js 押题', link: '/nodejs' },
+      { text: '算法押题', link: '/arithmetic' },
+      { text: '刁钻题', link: '/tricky' },
+      { text: '其他问题合集', link: '/other' },
+      { text: 'HTTP 相关问题', link: '/http-parse' },
+    ])
+  }
+]
+
+const errors = [
+  {
+    text: '前端报错',
+    items: [
+      { text: 'Node.js 报错', link: '/errors/node' },
+    ]
   }
 ]
 
@@ -161,9 +191,9 @@ export const nav = [
     link: '/'
   },
   {
-    text: 'Vanilla',
-    activeMatch: '/vanilla/|/typescript/',
-    link: vanilla[0].items[0].link
+    text: '前端',
+    activeMatch: '/frontend/|/typescript/',
+    link: Frontend[0].items[0].link
   },
   {
     text: 'Vue.js',
@@ -181,18 +211,35 @@ export const nav = [
     link: fullStack[0].items[0].link!
   },
   {
-    text: '杂项',
-    activeMatch: '/other/',
-    link: Other[0].items[0].link!
+    text: '其他',
+    items: [
+      // {
+      //   text: '金九银十',
+      //   activeMatch: '/interview/',
+      //   link: Interview[0].items[0].link!
+      // },
+      {
+        text: '报错集合',
+        activeMatch: '/errors/',
+        link: errors[0].items[0].link
+      },
+      {
+        text: '杂项',
+        activeMatch: '/other/',
+        link: Other[0].items[0].link!
+      }
+    ]
   }
 ]
 
 export const sidebar = {
-  '/': vanilla,
+  '/': Frontend,
   '/vue/': vue,
   '/react/': react,
   '/full-stack/': fullStack,
   '/other/': Other,
+  '/interview/': Interview,
+  '/errors/': errors
 }
 
 function createItems(pathPrefix: string, list: DefaultTheme.SidebarItem[]): DefaultTheme.SidebarItem[] {

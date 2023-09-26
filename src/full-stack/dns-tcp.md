@@ -28,7 +28,7 @@
 
 > ACK 是 acknowledge（获悉）的缩写
 
-![](./images/dns-tcp-2.png)
+<img class="w-100" src="./images/dns-tcp-2.png"/>
 
 **为什么要有第三次连接？**
 
@@ -43,7 +43,7 @@
 
 > FIN（finish 结束）表示关闭连接
 
-![](./images/dns-tcp-3.png)
+<img class="w-100" src="./images/dns-tcp-3.png"/>
 
 当 A、S 将上面的信息都发送完后才会关闭
 

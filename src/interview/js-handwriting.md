@@ -1,10 +1,8 @@
-# 常用方法实现
+# JavaScript 手写篇
 
-实现常见的 JavaScript 方法
+## 数组去重
 
-## 数组去重 unique
-
-```js
+```jsx
 // Array.from
 function uniq(value) {
   return Array.from(new Set(value))
@@ -31,7 +29,7 @@ function uniq(value) {
 }
 ```
 
-## 防抖 debounce
+## 手写防抖 debounce
 
 ```js
 // 定时器
@@ -73,9 +71,9 @@ function debounce(func, wait) {
 }
 ```
 
-## 节流 throttle
+## 手写节流 throttle
 
-```javascript
+```js
 // 定时器
 function throttle(func, wait) {
   let timerId
@@ -106,7 +104,14 @@ function throttle(func, wait) {
 }
 ```
 
-## 事件发布订阅 Emitter
+
+## 手写发布订阅
+
+实现一个发布订阅模式，满足以下条件
+
+1. on 监听事件
+2. emit 触发事件
+3. off 取消事件
 
 ```js
 class Emitter {
@@ -133,11 +138,36 @@ class Emitter {
     e[name] = fn ? e[name].filter(item => item !== fn && item._ !== fn) : []
   }
 }
+
+// 运行
+const emitter = new Emitter()
+emitter.on('click', console.log)
+emitter.on('click', console.error)
+
+setTimeout(() => {
+  emitter.emit('click', 'Jack')
+}, 3000)
 ```
 
-## bind 函数
 
-```js
+## 手写 bind
+
+例1：一个简单的 bind
+
+```jsx
+function bind(atThis, ...args) {
+  const fn = this
+  return function(..._args) {
+    fn.call(atThis, ...args, ..._args)
+  }
+}
+```
+
+例2：支持 new 的 bind
+
+> 模拟 new 时绑定 this 的情况，检查当前函数是否为 new 调用，如果是，就将当前构造函数作为 this 绑定调用
+
+```jsx
 function bind(atThis, ...prevArgs) {
   const fn = this
   const result = function(...args) {
@@ -147,11 +177,11 @@ function bind(atThis, ...prevArgs) {
   result.prototype = fn.prototype
   return result
 }
-
-export default bind
 ```
 
-## 深拷贝 cloneDeep
+## 手写深拷贝
+
+只支持常用对象拷贝（Object、Function、Array、Date、RegExp）
 
 ```js
 function cloneDeep(value) {
@@ -242,34 +272,26 @@ function useDraggable(el) {
 }
 ```
 
-## 回调函数转 Promise（Promisification）
+## 手写 Promise
 
-参考自：[Promisification](https://zh.javascript.info/promisify)，将回调形式的函数转为 Promise 处理
+代码参考：[vanilla-utils/promise.mjs at master · uphg/vanilla-utils (github.com)](https://github.com/uphg/vanilla-utils/blob/master/src/promise.mjs)
+
+## 手写 Promise.all
 
 ```js
-function promisify(fn, manyArgs = false) {
-  return function (...args) {
-    return new Promise((resolve, reject) => {
-      function callback(error, ...results) {
-        if (error) {
-          reject(error)
-        } else {
-          resolve(manyArgs ? results : results[0])
-        }
+Promise.all2 = function (list) {
+  let resultList = []
+  let count = 0
+  return new Promise((resolve, reject) => {
+    list.forEach(item => item.then((result) => {
+      resultList.push(result)
+      count += 1
+      if (count >= list.length) {
+        resolve(resultList)
       }
-
-      args.push(callback)
-      fn.call(this, ...args)
-    })
-  }
+    }, (reason) => {
+      reject(reason)
+    }))
+  })
 }
-
-// 使用
-const f1 = promisify((a, b, callback) => {
-  callback(null, a, b)
-}, true)
-
-f1(1, 2).then((results) => {
-  console.log(results) // [1, 2]
-})
 ```
