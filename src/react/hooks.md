@@ -474,6 +474,34 @@ const Child = memo((props) => {
 
 上面的内容表示，只有 b 的值更新时，onClickChild 函数才会重新获取，这样就可以防止多次更新 onClickChild 函数。
 
+### memo 的第二个参数
+
+memo 可以传入第二个参数，它的值为一个自定义的比较函数。只有返回值为 false 时才更新组件。
+
+例如实现一个只在 a 为奇数时更新的 Child 组件：
+
+```js
+import { useCallback, memo, useState } from "react";
+
+function App() {
+  const [a, setA] = useState(0)
+  const onClick = useCallback(() => {
+    setA((a) => a + 1)
+  }, [])
+  return (
+    <div className="App">
+      <button onClick={onClick}>点我</button>
+      <Child a={a} />
+    </div>
+  )
+}
+
+const Child = memo(function Child(props) {
+  console.log(`Child 更新了 ${props.a}`)
+  return <div>我是 Child{props.a}</div>
+}, (oldProps, newProps) => newProps.a % 2 === 0)
+```
+
 ## useCallback
 
 在重新 render 时缓存函数。它其实是 useMemo 的简写，用法如下：
