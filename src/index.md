@@ -9,7 +9,7 @@ hero:
   actions:
     - theme: brand
       text: Quick start
-      link: /vanilla/iterable-object
+      link: /frontend/iterable-object
     # - theme: alt
     #   text: API Examples
     #   link: /api-examples
