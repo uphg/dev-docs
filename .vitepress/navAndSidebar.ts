@@ -1,6 +1,6 @@
 import { DefaultTheme } from "vitepress"
 
-const Frontend = [
+const frontend = [
   {
     text: 'JavaScript',
     collapsed: false,
@@ -169,14 +169,17 @@ const Interview = [
 
 const errors = [
   {
-    text: '前端报错',
+    text: '全栈报错',
     items: [
       { text: 'Node.js 报错', link: '/errors/node' },
+      { text: 'Vite 报错', link: '/errors/vite' },
+      { text: 'Git 报错', link: '/errors/git' },
+      { text: 'VSCode 报错', link: '/errors/vscode' }
     ]
-  }
+  },
 ]
 
-const Other = [
+const other = [
   {
     text: '环境配置',
     items: [
@@ -194,7 +197,7 @@ export const nav = [
   {
     text: '前端',
     activeMatch: '/frontend/|/typescript/',
-    link: Frontend[0].items[0].link
+    link: frontend[0].items[0].link
   },
   {
     text: 'Vue.js',
@@ -227,18 +230,18 @@ export const nav = [
       {
         text: '杂项',
         activeMatch: '/other/',
-        link: Other[0].items[0].link!
+        link: other[0].items[0].link!
       }
     ]
   }
 ]
 
 export const sidebar = {
-  '/': Frontend,
+  '/': frontend,
   '/vue/': vue,
   '/react/': react,
   '/full-stack/': fullStack,
-  '/other/': Other,
+  '/other/': other,
   '/interview/': Interview,
   '/errors/': errors
 }
