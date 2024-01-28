@@ -1,10 +1,10 @@
 import { DefaultTheme } from "vitepress"
 
-const frontend = [
+const web = [
   {
     text: 'JavaScript',
     collapsed: false,
-    items: createItems('/frontend/', [
+    items: createItems('/web/', [
       { text: 'Iterable object（可迭代对象）', link: '/iterable-object' },
       { text: 'Generator', link: '/generators' },
       { text: '异步迭代和 generator', link: '/async-iterators-generators' },
@@ -138,11 +138,11 @@ const fullStack = [
     ])
   },
   {
-    text: '其他',
+    text: '环境搭建',
     collapsed: true,
     items: createItems('/full-stack/', [
       { text: 'Node.js 环境搭建', link: '/nodejs/node-env-setup' },
-      { text: '', link: '/mac-env' }
+      { text: 'Mac 开发环境搭建', link: '/mac-env' }
     ])
   }
 ]
@@ -169,7 +169,7 @@ const Interview = [
 
 const errors = [
   {
-    text: '全栈报错',
+    text: '报错集合',
     items: [
       { text: 'Node.js 报错', link: '/errors/node' },
       { text: 'Vite 报错', link: '/errors/vite' },
@@ -195,9 +195,9 @@ export const nav = [
     link: '/'
   },
   {
-    text: '前端',
-    activeMatch: '/frontend/|/typescript/',
-    link: frontend[0].items[0].link
+    text: 'Web',
+    activeMatch: '/web/|/typescript/',
+    link: web[0].items[0].link
   },
   {
     text: 'Vue.js',
@@ -215,6 +215,11 @@ export const nav = [
     link: fullStack[0].items[0].link!
   },
   {
+    text: '报错',
+    activeMatch: '/errors/',
+    link: errors[0].items[0].link!
+  },
+  {
     text: '其他',
     items: [
       // {
@@ -222,11 +227,6 @@ export const nav = [
       //   activeMatch: '/interview/',
       //   link: Interview[0].items[0].link!
       // },
-      {
-        text: '报错集合',
-        activeMatch: '/errors/',
-        link: errors[0].items[0].link
-      },
       {
         text: '杂项',
         activeMatch: '/other/',
@@ -237,7 +237,7 @@ export const nav = [
 ]
 
 export const sidebar = {
-  '/': frontend,
+  '/': web,
   '/vue/': vue,
   '/react/': react,
   '/full-stack/': fullStack,
