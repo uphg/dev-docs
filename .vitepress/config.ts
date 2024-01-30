@@ -25,6 +25,29 @@ export default defineConfig(withMermaid({
     }
   },
   vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules/vitepress-plugin-mermaid')) {
+              return 'vitepress-plugin-mermaid'
+            }
+            if (id.includes('node_modules/vue')) {
+              return 'vue'
+            }
+            if (id.includes('node_modules/minisearch')) {
+              return 'minisearch'
+            }
+            if (id.includes('node_modules/micromark')) {
+              return 'micromark'
+            }
+            if (id.includes('node_modules/elkjs')) {
+              return 'elkjs'
+            }
+          }
+        }
+      }
+    },
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('../src', import.meta.url))

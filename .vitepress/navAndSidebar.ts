@@ -212,17 +212,17 @@ export const nav = [
     link: fullStack[0].items[0].link!
   },
   {
+    text: '报错集合',
+    activeMatch: '/errors/',
+    link: errors[0].items[0].link
+  },
+  {
     text: '其他',
     items: [
-      // {
-      //   text: '金九银十',
-      //   activeMatch: '/interview/',
-      //   link: Interview[0].items[0].link!
-      // },
       {
-        text: '报错集合',
-        activeMatch: '/errors/',
-        link: errors[0].items[0].link
+        text: '金九银十',
+        activeMatch: '/interview/',
+        link: Interview[0].items[0].link!
       },
       {
         text: '杂项',
