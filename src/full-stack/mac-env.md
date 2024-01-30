@@ -4,7 +4,7 @@
 
 ### 安装 iTerm2
 
-首先安装 iTerm2，它的[官网](https://iterm2.com/) 
+见[官网](https://iterm2.com/) 
 
 ### 安装 oh-my-zsh
 
