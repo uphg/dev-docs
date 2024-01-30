@@ -2,7 +2,7 @@
 
 ## ES6 常用 API 有哪些
 
-见：[ES6 常用 API](../frontend/es6.md)
+见：[ES6 常用 API](../web/es6.md)
 
 let、const、箭头函数、Symbol、Set、WeakSet、Map、WeakMap、Proxy、Promise
 
