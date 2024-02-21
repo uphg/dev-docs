@@ -147,7 +147,7 @@ const fullStack = [
   }
 ]
 
-const Interview = [
+const interview = [
   {
     text: '金九银十',
     items: createItems('/interview/', [
@@ -189,6 +189,15 @@ const other = [
   }
 ]
 
+const config = [
+  {
+    text: 'IDE 配置合集',
+    items: [
+      { text: 'VSCode 配置', link: '/config/vscode' }
+    ]
+  }
+]
+
 export const nav = [
   {
     text: '首页',
@@ -223,9 +232,14 @@ export const nav = [
     text: '其他',
     items: [
       {
+        text: '配置集合',
+        activeMatch: '/config/',
+        link: config[0].items[0].link!
+      },
+      {
         text: '金九银十',
         activeMatch: '/interview/',
-        link: Interview[0].items[0].link!
+        link: interview[0].items[0].link!
       },
       {
         text: '杂项',
@@ -242,8 +256,9 @@ export const sidebar = {
   '/react/': react,
   '/full-stack/': fullStack,
   '/other/': other,
-  '/interview/': Interview,
-  '/errors/': errors
+  '/interview/': interview,
+  '/errors/': errors,
+  '/config/': config
 }
 
 function createItems(pathPrefix: string, list: DefaultTheme.SidebarItem[]): DefaultTheme.SidebarItem[] {
