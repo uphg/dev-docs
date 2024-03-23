@@ -75,8 +75,16 @@ const react = [
 
 const fullStack = [
   {
-    text: 'Web 性能优化',
+    text: '环境搭建',
     collapsed: false,
+    items: createItems('/full-stack/', [
+      { text: 'Node.js 环境搭建', link: '/nodejs/node-env-setup' },
+      { text: 'Mac 开发环境搭建', link: '/mac-env' }
+    ])
+  },
+  {
+    text: 'Web 性能优化',
+    collapsed: true,
     items: createItems('/full-stack/', [
       { text: 'DNS 与 TCP', link: '/dns-tcp' },
       { text: 'HTTP', link: '/http' },
@@ -120,7 +128,7 @@ const fullStack = [
   },
   {
     text: '记账项目',
-    collapsed: false,
+    collapsed: true,
     items: createItems('/full-stack/bookkeeping/', [
       { text: 'Docker 环境搭建', link: '/docker-env' },
       { text: 'Docker 操作手册', link: 'docker' },
@@ -135,14 +143,6 @@ const fullStack = [
       { text: 'Ruby 笔记', link: '/ruby' },
       { text: '工厂模式', link: '/factory-pattern' },
       { text: '你会做WEB上的用户登录功能吗？（转）', link: '/web-login' }
-    ])
-  },
-  {
-    text: '环境搭建',
-    collapsed: true,
-    items: createItems('/full-stack/', [
-      { text: 'Node.js 环境搭建', link: '/nodejs/node-env-setup' },
-      { text: 'Mac 开发环境搭建', link: '/mac-env' }
     ])
   }
 ]
@@ -169,14 +169,20 @@ const interview = [
 
 const errors = [
   {
-    text: '报错集合',
+    text: '编程报错',
     items: [
-      { text: 'Node.js 报错', link: '/errors/node' },
-      { text: 'Vite 报错', link: '/errors/vite' },
-      { text: 'Git 报错', link: '/errors/git' },
-      { text: 'VSCode 报错', link: '/errors/vscode' }
+      { text: 'Node.js', link: '/errors/node' },
+      { text: 'Vite', link: '/errors/vite' },
+      { text: 'Git', link: '/errors/git' },
+      { text: 'VSCode', link: '/errors/vscode' }
     ]
   },
+  {
+    text: '系统/环境错误',
+    items: [
+      { text: 'Windows', link: '/errors/windows' },
+    ]
+  }
 ]
 
 const other = [
