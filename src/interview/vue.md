@@ -137,3 +137,8 @@ Vue 3 相对于 Vue 2，做了以下几个改动（记不住可以只记前5条�
 8. 改进了模板编译器和渲染器，现在支持静态提升和一些编译时优化，使渲染性能更好
 9. 全局 API 发生了变化，如 **`Vue.config`** 改为 **`app.config`**、**`Vue.directive`** 改为 **`app.directive`** 等
 10. 更好的 TypeScript 支持，包括更好的类型推断和更准确的类型定义。
+
+## Vue2 & Vue3 中 `v-if` 与 `v-for` 的优先级
+
+- **在 Vue2 中：** 当 `v-if` 与 `v-for` 一起使用时，`v-for` 具有比 `v-if` 更高的优先级。请查阅[列表渲染指南](https://v2.cn.vuejs.org/v2/guide/list.html#v-for-object)以获取详细信息。
+- **在 Vue3 中：** 当 `v-if` 和 `v-for` 同时存在于一个元素上的时候，`v-if` 会首先被执行。请查看[列表渲染指南](https://cn.vuejs.org/guide/essentials/list.html#v-for-with-v-if)获取更多细节。

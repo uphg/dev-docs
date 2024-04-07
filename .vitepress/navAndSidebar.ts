@@ -78,8 +78,9 @@ const fullStack = [
     text: '环境搭建',
     collapsed: false,
     items: createItems('/full-stack/', [
+      { text: 'Git 使用手册', link: '/git-config' },
       { text: 'Node.js 环境搭建', link: '/nodejs/node-env-setup' },
-      { text: 'Mac 开发环境搭建', link: '/mac-env' }
+      { text: 'Mac 开发环境搭建', link: '/mac-env' },
     ])
   },
   {
@@ -189,7 +190,6 @@ const other = [
   {
     text: '环境配置',
     items: [
-      { text: 'Git 使用手册', link: '/other/git-config' },
       { text: 'ChatGPT 常用提示语', link: '/other/prompt' }
     ]
   }
