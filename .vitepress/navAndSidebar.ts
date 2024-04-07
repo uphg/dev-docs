@@ -210,7 +210,7 @@ export const nav = [
     link: '/'
   },
   {
-    text: 'Web',
+    text: '前端',
     activeMatch: '/web/|/typescript/',
     link: web[0].items[0].link
   },
