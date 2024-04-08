@@ -295,3 +295,11 @@ Promise.all2 = function (list) {
   })
 }
 ```
+
+## ES5 实现继承
+
+
+
+## 函数柯里化
+
+
