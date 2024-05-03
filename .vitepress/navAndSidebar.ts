@@ -1,5 +1,15 @@
 import { DefaultTheme } from "vitepress"
 
+const DesignPatterns = [
+  {
+    text: 'JavaScript 设计模式',
+    items: createItems('/design-patterns/', [
+      { text: 'JavaScript 设计模式笔记一', link: '/overview' },
+      { text: '工厂模式', link: '/factory' },
+    ]) 
+  },
+]
+
 const web = [
   {
     text: 'JavaScript',
@@ -258,7 +268,8 @@ export const sidebar = {
   '/other/': other,
   '/interview/': interview,
   '/errors/': errors,
-  '/config/': config
+  '/config/': config,
+  '/design-patterns/': DesignPatterns
 }
 
 function createItems(pathPrefix: string, list: DefaultTheme.SidebarItem[]): DefaultTheme.SidebarItem[] {
