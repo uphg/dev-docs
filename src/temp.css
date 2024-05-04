@@ -1,9 +1,0 @@
-.parent {
-  display: flex;
-  flex-direction: column;
-  flex-direction: row;
-  flex-direction: column-reverse;
-  flex-direction: row-reverse;
-
-  flex-wrap: wrap;
-}
