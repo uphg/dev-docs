@@ -52,8 +52,8 @@
 - 绝对定位元素（元素的 position 为 absolute 或 fixed）
 - 行内块 inline block 元素
 - overflow 值不为 visible 的块元素
-- 弹性元素（`[display](https://developer.mozilla.org/zh-CN/docs/Web/CSS/display)` 值为 `flex` 或 `inline-flex` 元素的直接子元素）
-- 网格元素（`[display](https://developer.mozilla.org/zh-CN/docs/Web/CSS/display)` 值为 `grid` 或 `inline-grid` 元素的直接子元素）
+- 弹性元素（[`display`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/display) 值为 `flex` 或 `inline-flex` 元素的直接子元素）
+- 网格元素（[`display`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/display) 值为 `grid` 或 `inline-grid` 元素的直接子元素）
 
 **解决了什么问题**
 

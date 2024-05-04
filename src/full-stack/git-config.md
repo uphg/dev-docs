@@ -10,7 +10,7 @@ git stash
 git stash pop
 ```
 
-### 本地与远程提交冲突
+### 解决本地与远程提交冲突
 
 假如我们本地提交与远程提交相互冲突了，这么做
 
@@ -69,49 +69,19 @@ ssh-keygen -t rsa -b 4096 -C "你的邮箱"
 cat ~/.ssh/id_rsa.pub
 ```
 
-```bash
-# 清空之前的 ssh 配置（如果有的话）
-rm -rf ~/.ssh/*
+打开 [SSH and GPG keys (github.com)](https://github.com/settings/keys)
 
-# 生成 ssh key，运行后按三次回车
-ssh-keygen -t rsa -b 4096 -C "你的邮箱"
+点击 New SSH key 新建一个你的 SSH key，将复制的 ssh 粘贴至 Key 中。
 
-# 复制你的 ssh
-cat ~/.ssh/id_rsa.pub
-```
-
-```bash
-# 清空之前的 ssh 配置（如果有的话）
-rm -rf ~/.ssh/*
-
-# 生成 ssh key，运行后按三次回车
-ssh-keygen -t rsa -b 4096 -C "你的邮箱"
-
-# 复制你的 ssh
-cat ~/.ssh/id_rsa.pub
-```
-
-```bash
-# 清空之前的 ssh 配置（如果有的话）
-rm -rf ~/.ssh/*
-
-# 生成 ssh key，运行后按三次回车
-ssh-keygen -t rsa -b 4096 -C "你的邮箱"
-
-# 复制你的 ssh
-cat ~/.ssh/id_rsa.pub
-```
-
-- 打开 [SSH and GPG keys (github.com)](https://github.com/settings/keys)
-- 点击 New SSH key 新建一个你的 SSH key
+创建完成后运行以下命令测试
     
-    ```jsx
-    # 运行
-    ssh -T git@github.com
-    
-    # 看到以下内容表示成功
-    Hi Jack! You've successfully authenticated, but GitHub does not provide shell access.
-    ```
+```jsx
+# 运行
+ssh -T git@github.com
+
+# 看到以下内容表示成功
+Hi Jack! You've successfully authenticated, but GitHub does not provide shell access.
+```
 
 ### 配置 Git 默认设置
 
