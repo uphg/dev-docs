@@ -16,7 +16,7 @@
 
 思维导图展示如下：
 
-![体系结构图](./images/structure.awebp)
+![体系结构图](./images/structure.webp)
 
 ## 设计模式的道与术
 
@@ -42,4 +42,4 @@
 
 所谓“术”，其实就是指二十年前 GOF 提出的最经典的23种设计模式。二十年前，四位程序员前辈（Erich Gamma, Richard Helm, Ralph Johnson & John Vlissides）通过编写《设计模式：可复用面向对象软件的基础》这本书，阐述了设计模式领域的开创性成果。在这本书中，将23种设计模式按照“创建型”、“行为型”和“结构型”进行划分：
 
-![设计模式分类](./images/art.awebp)
+![设计模式分类](./images/art.webp)

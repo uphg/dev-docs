@@ -29,7 +29,4 @@ next: false
 
 # 导航
 
-## JavaScript
-
-- [JavaScript 设计模式](./design-patterns/1.md)
-
+...
