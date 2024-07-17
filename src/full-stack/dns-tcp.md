@@ -4,25 +4,25 @@
 
 ## DNS
 
-全称 Domain Name System（域名系统），你给它一个域名，它给你返回一个 IP
+全称 Domain Name System（域名系统），你给它一个域名，它给你返回一个 IP。
 
 ### DNS 访问流程
 
 1. 当我们在浏览器输入一个域名，如 [baidu.com](http://baidu.com)。浏览器会先看自己有没有访问过 [baidu.com](http://baidu.com) 如果有，就把上一次的 IP 给你（缓存），如果没有，就去问操作系统。
-2. 操作系统也会先看自己有没有缓存，如果没有，再去问 ISP（服务商），这里操作的系统地址的可以根据 hosts 手动更改
-3. 浏览器拿到 IP 后，就会建立 TCP 连接
+2. 操作系统也会先看自己有没有缓存，如果没有，再去问 ISP（服务商），这里操作的系统地址的可以根据 hosts 手动更改。
+3. 浏览器拿到 IP 后，就会建立 TCP 连接。
 
 ## TCP 连接
 
-全称 Transmission Control Protocol（**传输控制协议**）
+全称 Transmission Control Protocol（**传输控制协议**）。
 
 ### 三次握手
 
 在下文的描述中 A 代指客户端，B 代指服务器
 
-1. A 向 B 发送一个 同步 syn
-2. B 向 A 回复一个 ACK 知道，并发送一个同步 syn
-3. A 向 B 回复一个 ACK 知道
+1. A 向 B 发送一个 同步 syn。
+2. B 向 A 回复一个 ACK 知道，并发送一个同步 syn。
+3. A 向 B 回复一个 ACK 知道。
 
 > syn 是同步的缩写（不是同步异步的同步，是同步信息的同步）
 
@@ -36,10 +36,10 @@
 
 ### 四次挥手
 
-1. A 对 B 说 FIN(X) 表示我说完了
-2. B 对 A 回复 ACK(X) 知道了
-3. B 对 A 说 FIN(Y) 我说完了
-4. A 对 B 说 ACK(Y) 知道了
+1. A 对 B 说 FIN(X) 表示我说完了。
+2. B 对 A 回复 ACK(X) 知道了。
+3. B 对 A 说 FIN(Y) 我说完了。
+4. A 对 B 说 ACK(Y) 知道了。
 
 > FIN（finish 结束）表示关闭连接
 
