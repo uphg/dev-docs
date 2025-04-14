@@ -17,6 +17,7 @@
     "@types/node": "20.4.5",
     "mermaid": "10.4.0",
     "sass": "1.63.6",
+    "unocss": "^66.1.0-beta.11",
     "vitepress": "1.6.3",
     "vitepress-plugin-mermaid": "2.0.16"
   },

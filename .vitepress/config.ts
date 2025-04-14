@@ -1,7 +1,20 @@
 import { defineConfig } from 'vitepress'
 import { fileURLToPath } from 'url'
-import { nav, sidebar } from './navAndSidebar'
+// import { nav, sidebar } from './navAndSidebar'
 import { withMermaid } from "vitepress-plugin-mermaid";
+import { create } from 'domain';
+import { createNavbar, createSidebar } from './shared/navigation';
+import { menu } from './menu';
+import { nav } from './navbar'
+import { sidebar } from './sidebar'
+
+// const nav = createNavbar(menu)
+// const sidebar = createSidebar(menu)
+
+// console.log('# nav')
+// console.log(JSON.stringify(nav, null, 2))
+// console.log('# sidebar')
+// console.log(JSON.stringify(sidebar, null, 2))
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig(withMermaid({
@@ -54,7 +67,7 @@ export default defineConfig(withMermaid({
       }
     }
   },
-  mermaid: {}
+  mermaid: {},
 }))
 
 

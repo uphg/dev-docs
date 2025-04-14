@@ -30,5 +30,3 @@ next: false
 # 导航
 
 ...
-
-<div class="w-100 h-100 border-1 border-solid border-red"></div>
