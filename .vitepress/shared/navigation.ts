@@ -1,81 +1,93 @@
 interface NavItem {
-  text: string;
+  text?: string;
   path?: string;
   link?: string;
   items?: NavItem[];
   activeMatch?: string;
 }
 
-interface SidebarItem {
-  text?: string;
-  path?: string;
-  link?: string;
-  items?: SidebarItem[];
-  collapsed?: boolean;
-}
-
-interface SidebarGroup {
-  path: string;
-  items: SidebarItem[];
-}
-
-type Sidebar = Record<string, SidebarItem[]>;
-
-export function createNavbar(data: NavItem[]): NavItem[] {
+export function createNavbar(data: NavItem[], parentPaths: string[] = []): NavItem[] {
   const navbar: NavItem[] = [];
 
   for (const topItem of data) {
-    const { path, text, items } = topItem ?? {};
-    if (path && items) {
-      const navItem: NavItem = { text, items: [] };
-      for (const item of items!) {
-        navItem.items!.push({
-          text: item.text,
-          activeMatch: joinPaths(topItem.path || '', item.path || ''),
-          path: getFirstChild(item, topItem.path || ''),
-        });
-      }
-      navbar.push(navItem);
+    const { path, items } = topItem;
+    const newItem: NavItem = { text: topItem.text };
+    if (items?.[0]?.path) {
+      newItem.items = createNavbar(items, [...parentPaths, path!]);
     } else {
-      navbar.push({ text, path });
+      const newPath = joinPaths(...parentPaths, path ?? '');
+      newItem.activeMatch = newPath;;
+      newItem.link = getFirstChild(topItem, newPath);
     }
+    navbar.push(newItem);
   }
 
   return navbar;
 }
 
-export function createSidebar(data: NavItem[]): Sidebar {
+export function createSidebar(data: NavItem[]): NavItem[] {
+  const sidebarTops = createSidebarTops(data);
+  const sidebars = createSidebarPath(sidebarTops);
+  const result: any = {}
 
-
-
-  const sidebarTops: SidebarGroup[] = [];
-
-
-  
-
-  // const result: Sidebar = {};
-  for (const sidebarItem of sidebars) {
-    const { path, items } = sidebarItem;
-    if (!result[path]) {
-      result[path] = items;
-    } else {
-      result[path].push(...items);
-    }
+  for (const item of sidebars) {
+    const { path, items } = item;
+    result[path!] = items;
   }
+  
   return result;
 }
 
-function createSidebarTopItem(item): SidebarItem {
-
-  // return paths;
+function createSidebarTops(
+  data: NavItem[],
+  parentPaths: string[] = [],
+  level: number = 0
+): NavItem[] {
+  return data.reduce<NavItem[]>((acc, item) => {
+    if (!item) return acc;
+    
+    const { path, items } = item;
+    const currentParentPaths = [...parentPaths.slice(0, level), path] as string[];
+    
+    if (!items?.[0]?.path) {
+      // 叶子节点
+      const newPath = joinPaths(...currentParentPaths);
+      acc.push({ ...item, path: newPath, items });
+    } else {
+      // 非叶子节点，递归处理
+      acc.push(...createSidebarTops(items, currentParentPaths, level + 1));
+    }
+    
+    return acc;
+  }, []);
 }
 
-function createSidebarItem(navItem: NavItem): string {
-
+function createSidebarPath(sidebarTops: NavItem[]): NavItem[] {
+  return sidebarTops.map(item => {
+    const { path, items } = item;
+    const newItem = { ...item, path };
+    if (items) {
+      newItem.items = generateAbsolutePath(items, [path]);
+    }
+    return newItem;
+  });
 }
 
-function joinPaths(...parts: (string)[]): string {
-  return parts.join('/').replace(/\/+/g, '/');
+function generateAbsolutePath(sidebarTops, parentPaths: any[] = []) {
+  const result: any[] = []
+  for (const item of sidebarTops) {
+    const { link, items } = item
+    const newItem = {
+      ...item,
+      link: joinPaths(...parentPaths, link)
+    }
+    result.push(newItem)
+    if (items) {
+      newItem.items = generateAbsolutePath(items, [...parentPaths, link])
+    }
+  }
+
+  return result
 }
 
 function getFirstChild(topItem: NavItem | undefined, ...prefix: string[]): string {
@@ -95,22 +107,9 @@ function getFirstChild(topItem: NavItem | undefined, ...prefix: string[]): strin
     paths.push(current.link);
   }
 
-  return paths.join('/').replace(/\/+/g, '/').replace(/^\//, '');
+  return joinPaths(...paths);
 }
 
-function createFlatLink(items: SidebarItem[], paths: string[]): SidebarItem[] {
-  const result: SidebarItem[] = [];
-
-  for (const item of items) {
-    const newItem: SidebarItem = {
-      ...item,
-      link: joinPaths(...paths, item.link || ''),
-    };
-    if (item.items) {
-      newItem.items = createFlatLink(item.items, [...paths, item.link || '']);
-    }
-
-    result.push(newItem);
-  }
-  return result;
+function joinPaths(...parts: (string)[]): string {
+  return parts.join('/').replace(/\/+/g, '/');
 }

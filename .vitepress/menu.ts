@@ -1,6 +1,3 @@
-import { link } from "fs";
-import { text } from "stream/consumers";
-
 export const menu = [
   {
     text: '首页',
@@ -16,6 +13,7 @@ export const menu = [
         items: [
           {
             text: 'JavaScript 基础',
+            link: '/base/',
             collapsed: false,
             items: [
               { text: 'Iterable object（可迭代对象）', link: '/iterable-object' },
@@ -34,6 +32,7 @@ export const menu = [
         items: [
           {
             text: 'TypeScript 基础',
+            link: '/',
             collapsed: false,
             items: [
               { text: '类型基础', link: '/basics' },
@@ -85,8 +84,8 @@ export const menu = [
           },
           {
             text: 'React Native',
-            collapsed: false,
             link: '/native/',
+            collapsed: false,
             items: [
               { text: '环境搭建', link: '/environment-setup'},
             ]
