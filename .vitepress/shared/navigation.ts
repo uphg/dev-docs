@@ -1,3 +1,5 @@
+import { omit } from 'lodash-es';
+
 interface NavItem {
   text?: string;
   path?: string;
@@ -77,9 +79,10 @@ function generateAbsolutePath(sidebarTops, parentPaths: any[] = []) {
   const result: any[] = []
   for (const item of sidebarTops) {
     const { link, items } = item
-    const newItem = {
-      ...item,
-      link: joinPaths(...parentPaths, link)
+    const isLast = !items || items.length === 0
+    const newItem: NavItem = {
+      ...omit(item, 'link'),
+      ...(isLast ? { link: joinPaths(...parentPaths, link) } : {}),
     }
     result.push(newItem)
     if (items) {
@@ -113,3 +116,4 @@ function getFirstChild(topItem: NavItem | undefined, ...prefix: string[]): strin
 function joinPaths(...parts: (string)[]): string {
   return parts.join('/').replace(/\/+/g, '/');
 }
+

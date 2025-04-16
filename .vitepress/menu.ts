@@ -1,3 +1,4 @@
+
 export const menu = [
   {
     text: '首页',
@@ -22,6 +23,14 @@ export const menu = [
               { text: 'Proxy 和 Reflect', link: '/proxy' },
               { text: '常用方法实现', link: '/api-implemented' },
               { text: 'ES6 常用 API', link: '/es6' }
+            ]
+          },
+          {
+            text: 'JavaScript 设计模式',
+            link: '/design-patterns/',
+            items: [
+              { text: 'JavaScript 设计模式笔记一', link: '/overview' },
+              { text: '工厂模式', link: '/factory' },
             ]
           }
         ]
@@ -91,6 +100,24 @@ export const menu = [
             ]
           },
         ]
+      },
+      {
+        text: '前端工具',
+        path: '/tools/',
+        collapsed: false,
+        items: [
+          {
+            text: 'Webpack 源码解析',
+            link: '/webpack',
+            collapsed: false,
+            items: [
+              { text: 'AST、babel、依赖', link: '/webpack-ast-babel-and-rely' },
+              { text: 'Webpack 核心原理', link: '/webpack-core' },
+              { text: 'Loader 原理', link: '/webpack-loader-principle' },
+              { text: 'Webpack 源码阅读', link: '/webpack-source' }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -123,20 +150,50 @@ export const menu = [
               { text: '数据库设计与搭建', link: '/database-design-and-build' },
               { text: '博客系统搭建', link: '/blog-system-building' },
             ]
-          },
+          }
+        ]
+      },
+    ]
+  },
+  {
+    text: 'DevOps',
+    path: '/dev-ops/',
+    items: [
+      {
+        text: 'IDE 配置集合',
+        path: '/ide-config/',
+        collapsed: false,
+        items: [
           {
-            text: 'Webpack 源码解析',
-            link: '/webpack',
+            text: 'IDE 配置',
+            link: '/',
             collapsed: false,
             items: [
-              { text: 'AST、babel、依赖', link: '/webpack-ast-babel-and-rely' },
-              { text: 'Webpack 核心原理', link: '/webpack-core' },
-              { text: 'Loader 原理', link: '/webpack-loader-principle' },
-              { text: 'Webpack 源码阅读', link: '/webpack-source' }
+              { text: 'VSCode 配置', link: '/vscode' },
             ]
           }
         ]
       },
+      {
+        text: 'Web 性能优化',
+        path: '/web-perf/',
+        items: [
+          {
+            text: 'Web 性能优化',
+            link: '/',
+            collapsed: false,
+            items: [
+              { text: 'DNS 与 TCP', link: '/dns-tcp' },
+              { text: 'HTTP', link: '/http' },
+              { text: '浏览器渲染原理', link: '/browser-rendering-principle' },
+              { text: '开发者工具', link: '/dev-tools' },
+              { text: '什么是连接复用', link: '/connection-multiplexing' },
+              { text: '多路复用', link: '/multiplexing' },
+              { text: 'WebSocket', link: '/websocket' }
+            ]
+          }
+        ]
+      }
     ]
   },
   {
@@ -161,6 +218,49 @@ export const menu = [
           { text: 'Ruby 笔记', link: '/ruby' },
           { text: '工厂模式', link: '/factory-pattern' },
           { text: '你会做WEB上的用户登录功能吗？（转）', link: '/web-login' }
+        ]
+      }
+    ]
+  },
+  {
+    text: '面试宝典',
+    path: '/interview/',
+    items: [
+      {
+        text: '金三银四',
+        link: '/',
+        collapsed: false,
+        items: [
+          { text: 'HTML + CSS', link: '/html-css' },
+          { text: 'JavaScript 基础篇', link: 'js-base' },
+          { text: 'JavaScript 手写篇', link: 'js-handwriting' },
+          { text: 'DOM 押题', link: '/dom' },
+          { text: 'HTTP 押题', link: '/http' },
+          { text: 'Vue 押题', link: '/vue' },
+          { text: 'React 押题', link: '/react' },
+          { text: 'Node.js 押题', link: '/nodejs' },
+          { text: '算法押题', link: '/arithmetic' },
+          { text: '刁钻题', link: '/tricky' },
+          { text: '其他问题合集', link: '/other' },
+          { text: 'HTTP 相关问题', link: '/http-parse' },
+        ]
+      }
+    ]
+  },
+  {
+    text: '异常处理',
+    path: '/errors/',
+    items: [
+      {
+        text: '错误处理',
+        link: '/',
+        collapsed: false,
+        items: [
+          { text: 'Git 错误处理', link: '/git' },
+          { text: 'Node.js 错误处理', link: '/node' },
+          { text: 'Vite 错误处理', link: '/vite' },
+          { text: 'VSCode 错误处理', link: '/vscode' },
+          { text: 'Windows 错误处理', link: '/windows' }
         ]
       }
     ]
