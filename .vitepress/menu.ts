@@ -1,3 +1,5 @@
+import path from "path";
+import { text } from "stream/consumers";
 
 export const menu = [
   {
@@ -15,7 +17,6 @@ export const menu = [
           {
             text: 'JavaScript 基础',
             link: '/base/',
-            collapsed: false,
             items: [
               { text: 'Iterable object（可迭代对象）', link: '/iterable-object' },
               { text: 'Generator', link: '/generators' },
@@ -42,7 +43,6 @@ export const menu = [
           {
             text: 'TypeScript 基础',
             link: '/',
-            collapsed: false,
             items: [
               { text: '类型基础', link: '/basics' },
               { text: '类型兼容', link: '/compatible' },
@@ -63,7 +63,6 @@ export const menu = [
           {
             text: 'Vue 设计与实现',
             link:'/design/',
-            collapsed: false,
             items: [
               { text: '框架设计概览', link: '/design-overview' },
               { text: 'Vue.js 设计思路', link: '/design-ideas' },
@@ -82,7 +81,6 @@ export const menu = [
           {
             text: 'React 基础',
             link: '/base/',
-            collapsed: false,
             items: [
               { text: 'Lisp 入门', link: '/lisp' },
               { text: '面向对象核心', link: '/object-oriented-core' },
@@ -94,7 +92,6 @@ export const menu = [
           {
             text: 'React Native',
             link: '/native/',
-            collapsed: false,
             items: [
               { text: '环境搭建', link: '/environment-setup'},
             ]
@@ -109,7 +106,6 @@ export const menu = [
           {
             text: 'Webpack 源码解析',
             link: '/webpack',
-            collapsed: false,
             items: [
               { text: 'AST、babel、依赖', link: '/webpack-ast-babel-and-rely' },
               { text: 'Webpack 核心原理', link: '/webpack-core' },
@@ -132,7 +128,6 @@ export const menu = [
           {
             text: 'Node.js 全解',
             link: '/guide',
-            collapsed: false,
             items: [
               { text: 'Node.js 环境搭建', link: '/node-env-setup' },
               { text: 'Node.js 技术架构', link: '/nodejs-technical-architecture'},
@@ -153,6 +148,26 @@ export const menu = [
           }
         ]
       },
+      {
+        text: 'Python',
+        path: '/py/',
+        items: [
+          {
+            text: 'Python 全解',
+            link: '/guide/',
+            items: [
+              { text: '安装 Python', link: '/py-install' },
+              { text: 'Python 基础', link: '/py-base' },
+              { text: '函数', link: '/py-function' },
+              { text: '高级特性', link: '/py-features' },
+              { text: '函数式编程', link: '/py-functional' },
+              { text: '模块详解', link: '/py-module' },
+              { text: '面向对象编程', link: '/py-oop' },
+              { text: '面向对象高级编程', link: '/py-oop-advanced' }
+            ]
+          }
+        ]
+      }
     ]
   },
   {
@@ -167,7 +182,6 @@ export const menu = [
           {
             text: 'IDE 配置',
             link: '/',
-            collapsed: false,
             items: [
               { text: 'VSCode 配置', link: '/vscode' },
             ]
@@ -181,7 +195,6 @@ export const menu = [
           {
             text: 'Web 性能优化',
             link: '/',
-            collapsed: false,
             items: [
               { text: 'DNS 与 TCP', link: '/dns-tcp' },
               { text: 'HTTP', link: '/http' },

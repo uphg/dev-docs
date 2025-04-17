@@ -35,46 +35,85 @@ tags:
 
 ## Node.js 技术架构
 
-<div class="flexible-container">
-  <ul class="flexible-table">
-    <li>
-      <p class="flexible-table__title"><b>Node.js API</b></p>
-      <p>http 模块、fs 模块、stream 模块</p>
-    </li>
-  </ul>
-  <ul class="flexible-table">
-    <li>
-      <p class="flexible-table__title"><b>Node.js bindings</b></p>
-      <p>让 JS 和 C/C++ 通信</p>
-    </li>
-    <li>
-      <p class="flexible-table__title"><b>C/C++ 插件</b></p>
-      <p>自定义其他能力</p>
-    </li>
-  </ul>
-  <ul class="flexible-table">
-    <li>
-      <p>JS 引擎</p>
-      <p>V8</p>
-    </li>
-    <li>
-      <p>跨平台异步I/O能力</p>
-      <p>libuv</p>
-    </li>
-    <li>
-      <p>DNS 解析</p>
-      <p>c-ares</p>
-    </li>
-    <li>
-      <p>加密解密</p>
-      <p>OpenSSL</p>
-    </li>
-    <li>
-      <p>其他...</p>
-      <p>http_parser、zlib</p>
-    </li>
-  </ul>
-</div>
+```mermaid
+graph TD
+    direction TB
+
+    subgraph "底层基础库"
+        V8[JS引擎: V8]
+        libuv[跨平台异步I/O: libuv] -->|依赖| c-ares[DNS解析: c-ares]
+        OpenSSL[加密解密: OpenSSL]
+        http_parser[HTTP协议解析: http_parser]
+        zlib[压缩/解压缩: zlib]
+    end
+
+    subgraph "Node.js 绑定层"
+        NodeBindings[Node.js Bindings\n(JS与C/C++通信接口)] -->|封装| libuv
+        NodeBindings -->|封装| http_parser
+        NodeBindings -->|封装| OpenSSL
+        NodeBindings -->|封装| zlib
+        NodeBindings -->|对接| V8[通过V8 API]
+    end
+
+    subgraph "Node.js 内置模块"
+        http模块[http 模块] -->|调用| NodeBindings
+        fs模块[fs 模块] -->|调用| NodeBindings
+        stream模块[stream 模块] -->|抽象| http模块
+        stream模块 -->|抽象| fs模块
+    end
+
+    subgraph "上层应用与扩展"
+        JS应用[JavaScript 应用] -->|使用| http模块
+        JS应用 -->|使用| fs模块
+        JS应用 -->|使用| stream模块
+        CPlugins[C/C++ 插件] -->|通过| NodeBindings[与JS交互]
+        CPlugins -->|直接调用| libuv
+        CPlugins -->|直接调用| OpenSSL
+        CPlugins -->|直接调用| zlib
+    end
+
+    classDef engine fill:#f96,stroke:#333
+    classDef lib fill:#6cf,stroke:#333
+    classDef binding fill:#fc6,stroke:#333
+    classDef module fill:#9f6,stroke:#333
+    classDef app fill:#c9f,stroke:#333
+
+    class V8 engine
+    class libuv,c-ares,OpenSSL,http_parser,zlib lib
+    class NodeBindings binding
+    class http模块,fs模块,stream模块 module
+    class JS应用,CPlugins app
+```
+
+http 模块、fs 模块、stream 模块
+
+- **Node.js bindings**
+
+  让 JS 和 C/C++ 通信
+
+- **C/C++ 插件**
+
+  自定义其他能力
+
+- JS 引擎
+
+  V8
+
+- 跨平台异步I/O能力
+
+  libuv
+
+- DNS 解析
+
+  c-ares
+
+- 加密解密
+
+  OpenSSL
+
+- 其他...
+
+  http_parser、zlib
 
 随着 Node.js 的版本已经从 0.8 升级到 12.11.1，其架构也在一直变化中。如果你想看源码，推荐看 [Node.js v0.10.0](https://github.com/nodejs/node/tree/v0.10.0) 版本，因为这个版本使用了很久，而且源码相对最新版较少。
 
